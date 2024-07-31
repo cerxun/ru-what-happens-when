@@ -1,9 +1,13 @@
 # ru-what-happens-when
 What happens when on Russian
 What happens when...
+Что происходит когда
+
 This repository is an attempt to answer the age-old interview question "What happens when you type google.com into your browser's address box and press enter?"
+Этот репозиторий попытка ответить на возрасто старый вопрос на интервью "Что происходит когда вы набираете google.com в строке вашего браузера и нажимаете Ввод?"
 
 Except instead of the usual story, we're going to try to answer this question in as much detail as possible. No skipping out on anything.
+Что но это не обычная история,
 
 This is a collaborative process, so dig in and try to help out! There are tons of details missing, just waiting for you to add them! So send us a pull request, please!
 
