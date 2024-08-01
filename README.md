@@ -1,21 +1,22 @@
 # ru-what-happens-when
 What happens when on Russian
-What happens when...
-Что происходит когда
+Что происходит когда ... (русская версия)
 
 This repository is an attempt to answer the age-old interview question "What happens when you type google.com into your browser's address box and press enter?"
-Этот репозиторий попытка ответить на возрасто старый вопрос на интервью "Что происходит когда вы набираете google.com в строке вашего браузера и нажимаете Ввод?"
+Этот репозиторий попытка ответить на извечный вопрос на интервью "Что происходит когда вы набираете google.com в строке вашего браузера и нажимаете Ввод?"
 
 Except instead of the usual story, we're going to try to answer this question in as much detail as possible. No skipping out on anything.
-Что но это не обычная история,
+Только вместо обычной истории, мы постараемся ответить на этот вопрос как можно подробнее. Ничего не упуская.
 
 This is a collaborative process, so dig in and try to help out! There are tons of details missing, just waiting for you to add them! So send us a pull request, please!
+Это коллективный процесс, так что вникайте и старайтесь помочь! Не хватает множества деталей, мы просто ждем, когда вы их добавите! Поэтому, пожалуйста, отправьте нам pull request!
 
 This is all licensed under the terms of the Creative Commons Zero license.
-
-Read this in 简体中文 (simplified Chinese), 日本語 (Japanese), 한국어 (Korean) and Spanish. NOTE: these have not been reviewed by the alex/what-happens-when maintainers.
+Все это распространяется на условиях нулевой лицензии Creative Commons.
 
 Table of Contents
+Содержание
+
 The "g" key is pressed
 The "enter" key bottoms out
 Interrupt fires [NOT for USB keyboards]
@@ -41,6 +42,7 @@ Page Rendering
 GPU Rendering
 Window Server
 Post-rendering and user-induced execution
+
 The "g" key is pressed
 The following sections explain the physical keyboard actions and the OS interrupts. When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
 
@@ -317,4 +319,5 @@ During the rendering process the graphical computing layers can use general purp
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.
 Window Server
 Post-rendering and user-induced execution
+
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.
