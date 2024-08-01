@@ -14,42 +14,42 @@ This is a collaborative process, so dig in and try to help out! There are tons o
 This is all licensed under the terms of the Creative Commons Zero license.
 Все это распространяется на условиях нулевой лицензии Creative Commons.
 
-Table of Contents
+>Table of Contents
 Содержание
 
-The "g" key is pressed
-The "enter" key bottoms out
-Interrupt fires [NOT for USB keyboards]
-(On Windows) A WM_KEYDOWN message is sent to the app
-(On OS X) A KeyDown NSEvent is sent to the app
-(On GNU/Linux) the Xorg server listens for keycodes
-Parse URL
-Is it a URL or a search term?
-Convert non-ASCII Unicode characters in the hostname
-Check HSTS list
-DNS lookup
-ARP process
-Opening of a socket
-TLS handshake
-If a packet is dropped
-HTTP protocol
-HTTP Server Request Handle
-Behind the scenes of the Browser
-Browser
-HTML parsing
-CSS interpretation
-Page Rendering
-GPU Rendering
-Window Server
-Post-rendering and user-induced execution
+>>The "g" key is pressed
+>>The "enter" key bottoms out
+>>Interrupt fires [NOT for USB keyboards]
+>>(On Windows) A WM_KEYDOWN message is sent to the app
+>>(On OS X) A KeyDown NSEvent is sent to the app
+>>(On GNU/Linux) the Xorg server listens for keycodes
+>>Parse URL
+>>Is it a URL or a search term?
+>>Convert non-ASCII Unicode characters in the hostname
+>>Check HSTS list
+>>DNS lookup
+>>ARP process
+>>Opening of a socket
+>>TLS handshake
+>>If a packet is dropped
+>>HTTP protocol
+>>HTTP Server Request Handle
+>>Behind the scenes of the Browser
+>>Browser
+>>HTML parsing
+>>CSS interpretation
+>>Page Rendering
+>>GPU Rendering
+>>Window Server
+>>Post-rendering and user-induced execution
 
-The "g" key is pressed
+*The "g" key is pressed
 The following sections explain the physical keyboard actions and the OS interrupts. When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
 
-The "enter" key bottoms out
+*The "enter" key bottoms out
 To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
 
-In the case of the USB keyboard:
+*In the case of the USB keyboard:
 
 The USB circuitry of the keyboard is powered by the 5V supply provided over pin 1 from the computer's USB host controller.
 The keycode generated is stored by internal keyboard circuitry memory in a register called "endpoint".
@@ -66,7 +66,7 @@ This interrupt notifies the currently focused application of a 'key pressed' eve
 Interrupt fires [NOT for USB keyboards]
 The keyboard sends signals on its interrupt request line (IRQ), which is mapped to an interrupt vector (integer) by the interrupt controller. The CPU uses the Interrupt Descriptor Table (IDT) to map the interrupt vectors to functions (interrupt handlers) which are supplied by the kernel. When an interrupt arrives, the CPU indexes the IDT with the interrupt vector and runs the appropriate handler. Thus, the kernel is entered.
 
-(On Windows) A WM_KEYDOWN message is sent to the app
+*(On Windows) A WM_KEYDOWN message is sent to the app
 The HID transport passes the key down event to the KBDHID.sys driver which converts the HID usage into a scancode. In this case, the scan code is VK_RETURN (0x0D). The KBDHID.sys driver interfaces with the KBDCLASS.sys (keyboard class driver). This driver is responsible for handling all keyboard and keypad input in a secure manner. It then calls into Win32K.sys (after potentially passing the message through 3rd party keyboard filters that are installed). This all happens in kernel mode.
 
 Win32K.sys figures out what window is the active window through the GetForegroundWindow() API. This API provides the window handle of the browser's address box. The main Windows "message pump" then calls SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam is a bitmask that indicates further information about the keypress: repeat count (0 in this case), the actual scan code (can be OEM dependent, but generally wouldn't be for VK_RETURN), whether extended keys (e.g. alt, shift, ctrl) were also pressed (they weren't), and some other state.
@@ -75,29 +75,31 @@ The Windows SendMessage API is a straightforward function that adds the message 
 
 The window (hWnd) that is active is actually an edit control and the WindowProc in this case has a message handler for WM_KEYDOWN messages. This code looks within the 3rd parameter that was passed to SendMessage (wParam) and, because it is VK_RETURN knows the user has hit the ENTER key.
 
-(On OS X) A KeyDown NSEvent is sent to the app
+*(On OS X) A KeyDown NSEvent is sent to the app
 The interrupt signal triggers an interrupt event in the I/O Kit kext keyboard driver. The driver translates the signal into a key code which is passed to the OS X WindowServer process. Resultantly, the WindowServer dispatches an event to any appropriate (e.g. active or listening) applications through their Mach port where it is placed into an event queue. Events can then be read from this queue by threads with sufficient privileges calling the mach_ipc_dispatch function. This most commonly occurs through, and is handled by, an NSApplication main event loop, via an NSEvent of NSEventType KeyDown.
 
-(On GNU/Linux) the Xorg server listens for keycodes
+*(On GNU/Linux) the Xorg server listens for keycodes
 When a graphical X server is used, X will use the generic event driver evdev to acquire the keypress. A re-mapping of keycodes to scancodes is made with X server specific keymaps and rules. When the scancode mapping of the key pressed is complete, the X server sends the character to the window manager (DWM, metacity, i3, etc), so the window manager in turn sends the character to the focused window. The graphical API of the window that receives the character prints the appropriate font symbol in the appropriate focused field.
 
-Parse URL
+*Parse URL
 The browser now has the following information contained in the URL (Uniform Resource Locator):
 
-Protocol "http"
+*Protocol "http"
 Use 'Hyper Text Transfer Protocol'
 Resource "/"
 Retrieve main (index) page
 Is it a URL or a search term?
 When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
 
-Convert non-ASCII Unicode characters in the hostname
+*Convert non-ASCII Unicode characters in the hostname
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
 Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.
-Check HSTS list
+
+*Check HSTS list
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
 If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)
-DNS lookup
+
+*DNS lookup
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
@@ -152,9 +154,9 @@ This segment is sent to the Network Layer, which wraps an additional IP header. 
 The packet next arrives at the Link Layer. A frame header is added that includes the MAC address of the machine's NIC as well as the MAC address of the gateway (local router). As before, if the kernel does not know the MAC address of the gateway, it must broadcast an ARP query to find it.
 At this point the packet is ready to be transmitted through either:
 
-Ethernet
-WiFi
-Cellular data network
+*Ethernet
+*WiFi
+*Cellular data network
 For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.
 
 Most larger businesses and some newer residential connections will have fiber or direct Ethernet connections in which case the data remains digital and is passed directly to the next network node for processing.
@@ -179,7 +181,8 @@ To close the connection:
 The closer sends a FIN packet
 The other sides ACKs the FIN packet and sends its own FIN
 The closer acknowledges the other side's FIN with an ACK
-TLS handshake
+
+*TLS handshake
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
 The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
 The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.
@@ -227,10 +230,10 @@ After parsing the HTML, the web browser (and server) repeats this process for ev
 
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.
 
-HTTP Server Request Handle
+*HTTP Server Request Handle
 The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.
 
-The HTTPD (HTTP Daemon) receives the request.
+*The HTTPD (HTTP Daemon) receives the request.
 The server breaks down the request to the following parameters:
 HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
 Domain, in this case - google.com.
@@ -244,7 +247,7 @@ The server parses the file according to the handler. If Google is running on PHP
 Behind the scenes of the Browser
 Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:
 
-Parsing - HTML, CSS, JS
+*Parsing - HTML, CSS, JS
 Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree
 Browser
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).
@@ -269,7 +272,8 @@ Networking: The networking handles network calls such as HTTP requests, using di
 UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.
 JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.
 Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.
-HTML parsing
+
+*HTML parsing
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.
 
 The primary job of the HTML parser is to parse the HTML markup into a parse tree.
@@ -297,11 +301,13 @@ At this stage the browser marks the document as interactive and starts parsing s
 
 Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.
 
-CSS interpretation
+*CSS interpretation
+
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"
 Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.
 A CSS parser can be top-down or bottom-up when a specific parser generator is used.
-Page Rendering
+
+*Page Rendering
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
 Calculate the actual width of each node top-down by allocating each node's available width to its children.
@@ -314,7 +320,8 @@ The frame/render objects for each layer are traversed and drawing commands are e
 All of the above steps may reuse calculated values from the last time the webpage was rendered, so that incremental changes require less work.
 The page layers are sent to the compositing process where they are combined with layers for other visible content like the browser chrome, iframes and addon panels.
 Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.
-GPU Rendering
+
+*GPU Rendering
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.
 Window Server
