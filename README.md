@@ -20,32 +20,33 @@ Table of Contents
 The "g" key is pressed - Нажата клавиша "g"
 The "enter" key bottoms out - Клавиша "enter" опускается до самого низа
 Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [НЕ для USB-клавиатур] 
-(On Windows) A WM_KEYDOWN message is sent to the app
-(On OS X) A KeyDown NSEvent is sent to the app
-(On GNU/Linux) the Xorg server listens for keycodes
-Parse URL
-Is it a URL or a search term?
-Convert non-ASCII Unicode characters in the hostname
-Check HSTS list
-DNS lookup
-ARP process
-Opening of a socket
-TLS handshake
-If a packet is dropped
-HTTP protocol
-HTTP Server Request Handle
-Behind the scenes of the Browser
-Browser
-HTML parsing
-CSS interpretation
-Page Rendering
-GPU Rendering
-Window Server
-Post-rendering and user-induced execution
+(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение WM_KEYDOWN отправляется приложению.
+(On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению
+(On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.
+Parse URL - Парсинг URL
+Is it a URL or a search term? - Это URL или поисковый запрос
+Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.
+Check HSTS list - Проверка списка HSTS
+DNS lookup - Поиск DNS
+ARP process - Поиск DNS
+Opening of a socket - Открытие сокета
+TLS handshake - Установление связи TLS 
+If a packet is dropped - Если пакет отброшен
+HTTP protocol - Протокол HTTP
+HTTP Server Request Handle - Обработка запроса HTTP сервера
+Behind the scenes of the Browser - За кулисами браузера
+Browser - Браузер
+HTML parsing - Парсинг HTML
+CSS interpretation Интерпретация CSS
+Page Rendering - Рендеринг страницы
+GPU Rendering - Рендеринг процессора
+Window Server = Сервер Windows
+Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение
 
 The "g" key is pressed
 
 The following sections explain the physical keyboard actions and the OS interrupts. When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
+В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы. При нажатии клавиши "g" браузер получает сообщение о событии и запускает функции автозаполнения. В зависимости от алгоритма работы вашего браузера и от того, находитесь ли вы в режиме приватности / инкогнито или нет, вам будут представлены различные предложения в выпадающем списке под строкой URL. Большинство из этих алгоритмов сортируют и определяют приоритетность результатов на основе истории поиска, закладок, файлов cookie и популярных поисковых запросов в Интернете в целом. При вводе "google.com" запускается множество блоков кода, и предложения будут уточняться с каждым нажатием клавиши. Он может даже предложить "google.com" до того, как вы закончите вводить его.
 
 The "enter" key bottoms out
 To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
