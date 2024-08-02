@@ -17,9 +17,9 @@ This is all licensed under the terms of the Creative Commons Zero license.
 Table of Contents
 Содержание
 
-The "g" key is pressed
-The "enter" key bottoms out
-Interrupt fires [NOT for USB keyboards]
+The "g" key is pressed - Нажата клавиша "g"
+The "enter" key bottoms out - Клавиша "enter" опускается до самого низа
+Interrupt fires [NOT for USB keyboards] -   
 (On Windows) A WM_KEYDOWN message is sent to the app
 (On OS X) A KeyDown NSEvent is sent to the app
 (On GNU/Linux) the Xorg server listens for keycodes
@@ -44,6 +44,7 @@ Window Server
 Post-rendering and user-induced execution
 
 The "g" key is pressed
+
 The following sections explain the physical keyboard actions and the OS interrupts. When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
 
 The "enter" key bottoms out
