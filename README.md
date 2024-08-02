@@ -19,7 +19,7 @@ Table of Contents
 
 The "g" key is pressed - Нажата клавиша "g"
 The "enter" key bottoms out - Клавиша "enter" опускается до самого низа
-Interrupt fires [NOT for USB keyboards] -   
+Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [НЕ для USB-клавиатур] 
 (On Windows) A WM_KEYDOWN message is sent to the app
 (On OS X) A KeyDown NSEvent is sent to the app
 (On GNU/Linux) the Xorg server listens for keycodes
