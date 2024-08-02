@@ -95,9 +95,11 @@ When no protocol or valid domain name is given the browser proceeds to feed the 
 Convert non-ASCII Unicode characters in the hostname
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
 Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.
+
 Check HSTS list
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
 If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)
+
 DNS lookup
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
@@ -180,6 +182,7 @@ To close the connection:
 The closer sends a FIN packet
 The other sides ACKs the FIN packet and sends its own FIN
 The closer acknowledges the other side's FIN with an ACK
+
 TLS handshake
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
 The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
@@ -270,6 +273,7 @@ Networking: The networking handles network calls such as HTTP requests, using di
 UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.
 JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.
 Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.
+
 HTML parsing
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.
 
@@ -299,9 +303,11 @@ At this stage the browser marks the document as interactive and starts parsing s
 Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.
 
 CSS interpretation
+
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"
 Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.
 A CSS parser can be top-down or bottom-up when a specific parser generator is used.
+
 Page Rendering
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
@@ -315,6 +321,7 @@ The frame/render objects for each layer are traversed and drawing commands are e
 All of the above steps may reuse calculated values from the last time the webpage was rendered, so that incremental changes require less work.
 The page layers are sent to the compositing process where they are combined with layers for other visible content like the browser chrome, iframes and addon panels.
 Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.
+
 GPU Rendering
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.
