@@ -44,14 +44,17 @@ Window Server = Сервер Windows
 Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение
 
 The "g" key is pressed
+Нажата клавиша "g"
 
 The following sections explain the physical keyboard actions and the OS interrupts. When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы. При нажатии клавиши "g" браузер получает сообщение о событии и запускает функции автозаполнения. В зависимости от алгоритма работы вашего браузера и от того, находитесь ли вы в режиме приватности / инкогнито или нет, вам будут представлены различные предложения в выпадающем списке под строкой URL. Большинство из этих алгоритмов сортируют и определяют приоритетность результатов на основе истории поиска, закладок, файлов cookie и популярных поисковых запросов в Интернете в целом. При вводе "google.com" запускается множество блоков кода, и предложения будут уточняться с каждым нажатием клавиши. Он может даже предложить "google.com" до того, как вы закончите вводить его.
 
 The "enter" key bottoms out
 Клавиша "enter" опускается до самого низа
+
 To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
 Чтобы выбрать нулевую точку, давайте нажмем клавишу Enter на клавиатуре в нижней части диапазона. В этот момент электрическая цепь, соответствующая клавише enter, замыкается (либо напрямую, либо емкостно). Это позволяет небольшому количеству тока поступать в логическую схему клавиатуры, которая сканирует состояние каждого переключателя клавиш, устраняет электрические помехи, возникающие при быстром прерывистом замыкании переключателя, и преобразует их в целое число с кодом клавиши, в данном случае 13. Затем контроллер клавиатуры кодирует код клавиши для передачи на компьютер. В настоящее время это почти повсеместно осуществляется через универсальную последовательную шину (USB) или Bluetooth-соединение, но исторически это происходило через PS/2 или ADB-соединения.
+
 In the case of the USB keyboard:
 В случае USB-клавиатуры:
 
@@ -76,6 +79,12 @@ The virtual keyboard can now raise a software interrupt for sending a 'key press
 This interrupt notifies the currently focused application of a 'key pressed' event.
 Interrupt fires [NOT for USB keyboards]
 The keyboard sends signals on its interrupt request line (IRQ), which is mapped to an interrupt vector (integer) by the interrupt controller. The CPU uses the Interrupt Descriptor Table (IDT) to map the interrupt vectors to functions (interrupt handlers) which are supplied by the kernel. When an interrupt arrives, the CPU indexes the IDT with the interrupt vector and runs the appropriate handler. Thus, the kernel is entered.
+Когда пользователь прикасается пальцем к современному емкостному сенсорному экрану, к пальцу передается небольшое количество тока. Это замыкает цепь через электростатическое поле проводящего слоя и создает падение напряжения в этой точке экрана. Затем экранный контроллер выдает прерывание, сообщающее о координате нажатия клавиши.
+Затем мобильная операционная система уведомляет приложение, на котором в данный момент сосредоточено внимание, о событии нажатия в одном из элементов графического интерфейса (который теперь является кнопками приложения виртуальной клавиатуры).
+Виртуальная клавиатура теперь может вызывать программное прерывание для отправки сообщения "нажата клавиша" обратно в операционную систему.
+Это прерывание уведомляет текущее приложение о событии "нажата клавиша".
+Срабатывает прерывание [НЕ для USB-клавиатур]
+Клавиатура отправляет сигналы в строке запроса на прерывание (IRQ), которая преобразуется контроллером прерываний в вектор прерываний (integer). Центральный процессор использует таблицу дескрипторов прерываний (IDT) для сопоставления векторов прерываний с функциями (обработчиками прерываний), которые предоставляются ядром. Когда поступает прерывание, центральный процессор индексирует IDT с вектором прерывания и запускает соответствующий обработчик. Таким образом, вводится ядро.
 
 (On Windows) A WM_KEYDOWN message is sent to the app
 The HID transport passes the key down event to the KBDHID.sys driver which converts the HID usage into a scancode. In this case, the scan code is VK_RETURN (0x0D). The KBDHID.sys driver interfaces with the KBDCLASS.sys (keyboard class driver). This driver is responsible for handling all keyboard and keypad input in a secure manner. It then calls into Win32K.sys (after potentially passing the message through 3rd party keyboard filters that are installed). This all happens in kernel mode.
