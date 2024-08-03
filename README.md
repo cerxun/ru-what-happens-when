@@ -79,7 +79,7 @@ The virtual keyboard can now raise a software interrupt for sending a 'key press
 This interrupt notifies the currently focused application of a 'key pressed' event.
 Interrupt fires [NOT for USB keyboards]
 The keyboard sends signals on its interrupt request line (IRQ), which is mapped to an interrupt vector (integer) by the interrupt controller. The CPU uses the Interrupt Descriptor Table (IDT) to map the interrupt vectors to functions (interrupt handlers) which are supplied by the kernel. When an interrupt arrives, the CPU indexes the IDT with the interrupt vector and runs the appropriate handler. Thus, the kernel is entered.
-Когда пользователь прикасается пальцем к современному емкостному сенсорному экрану, к пальцу передается небольшое количество тока. Это замыкает цепь через электростатическое поле проводящего слоя и создает падение напряжения в этой точке экрана. Затем экранный контроллер выдает прерывание, сообщающее о координате нажатия клавиши.
+  Когда пользователь прикасается пальцем к современному емкостному сенсорному экрану, к пальцу передается небольшое количество тока. Это замыкает цепь через электростатическое поле проводящего слоя и создает падение напряжения в этой точке экрана. Затем экранный контроллер выдает прерывание, сообщающее о координате нажатия клавиши.
 Затем мобильная операционная система уведомляет приложение, на котором в данный момент сосредоточено внимание, о событии нажатия в одном из элементов графического интерфейса (который теперь является кнопками приложения виртуальной клавиатуры).
 Виртуальная клавиатура теперь может вызывать программное прерывание для отправки сообщения "нажата клавиша" обратно в операционную систему.
 Это прерывание уведомляет текущее приложение о событии "нажата клавиша".
