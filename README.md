@@ -49,9 +49,11 @@ The following sections explain the physical keyboard actions and the OS interrup
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы. При нажатии клавиши "g" браузер получает сообщение о событии и запускает функции автозаполнения. В зависимости от алгоритма работы вашего браузера и от того, находитесь ли вы в режиме приватности / инкогнито или нет, вам будут представлены различные предложения в выпадающем списке под строкой URL. Большинство из этих алгоритмов сортируют и определяют приоритетность результатов на основе истории поиска, закладок, файлов cookie и популярных поисковых запросов в Интернете в целом. При вводе "google.com" запускается множество блоков кода, и предложения будут уточняться с каждым нажатием клавиши. Он может даже предложить "google.com" до того, как вы закончите вводить его.
 
 The "enter" key bottoms out
+
 To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
 
 In the case of the USB keyboard:
+В случае USB-клавиатуры:
 
 The USB circuitry of the keyboard is powered by the 5V supply provided over pin 1 from the computer's USB host controller.
 The keycode generated is stored by internal keyboard circuitry memory in a register called "endpoint".
@@ -60,6 +62,13 @@ This value goes to the USB SIE (Serial Interface Engine) to be converted in one 
 Those packets are sent by a differential electrical signal over D+ and D- pins (the middle 2) at a maximum speed of 1.5 Mb/s, as an HID (Human Interface Device) device is always declared to be a "low-speed device" (USB 2.0 compliance).
 This serial signal is then decoded at the computer's host USB controller, and interpreted by the computer's Human Interface Device (HID) universal keyboard device driver. The value of the key is then passed into the operating system's hardware abstraction layer.
 In the case of Virtual Keyboard (as in touch screen devices):
+USB-схема клавиатуры питается от источника питания напряжением 5 В, подключенного к контакту 1 USB-контроллера компьютера.
+Сгенерированный код ключа сохраняется во внутренней памяти клавиатуры в регистре, называемом "конечная точка".
+Главный USB-контроллер опрашивает эту "конечную точку" каждые ~10 мс (минимальное значение, объявленное клавиатурой), поэтому он получает сохраненное на нем значение кода ключа.
+Это значение передается в USB SIE (модуль последовательного интерфейса) для преобразования в один или несколько USB-пакетов, которые соответствуют низкоуровневому USB-протоколу.
+Эти пакеты передаются с помощью дифференциального электрического сигнала по контактам D+ и D-link (средние 2) с максимальной скоростью 1,5 Мб/с, поскольку устройство HID (Human Interface Device) всегда считается "низкоскоростным устройством" (соответствует стандарту USB 2.0).
+Этот последовательный сигнал затем декодируется на главном USB-контроллере компьютера и интерпретируется драйвером универсального клавиатурного устройства HID (Human Interface Device) компьютера. Значение ключа затем передается на уровень аппаратной абстракции операционной системы.
+В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):
 
 When the user puts their finger on a modern capacitive touch screen, a tiny amount of current gets transferred to the finger. This completes the circuit through the electrostatic field of the conductive layer and creates a voltage drop at that point on the screen. The screen controller then raises an interrupt reporting the coordinate of the keypress.
 Then the mobile OS notifies the currently focused application of a press event in one of its GUI elements (which now is the virtual keyboard application buttons).
