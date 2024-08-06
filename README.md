@@ -115,11 +115,11 @@ The browser now has the following information contained in the URL (Uniform Reso
 Проанализировать URL-адрес
 Теперь браузер имеет следующую информацию, содержащуюся в URL-адресе (единый указатель ресурсов):
 
-Protocol "http"
-Use 'Hyper Text Transfer Protocol'
-Resource "/"
-Retrieve main (index) page
-Is it a URL or a search term?
+Protocol "http"  
+Use 'Hyper Text Transfer Protocol'  
+Resource "/"  
+Retrieve main (index) page  
+Is it a URL or a search term?  
 When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
 Протокол "http"
 Используйте "Протокол передачи гипертекста"
@@ -128,63 +128,66 @@ When no protocol or valid domain name is given the browser proceeds to feed the 
 Это URL-адрес или поисковый запрос?
 Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.
 
-Convert non-ASCII Unicode characters in the hostname
+Convert non-ASCII Unicode characters in the hostname  
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
 Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.
 Преобразуйте символы Юникода, отличные от ASCII, в имя хоста
 Браузер проверяет имя хоста на наличие символов, отличных от a-z, A-Z, 0-9, -, или ..
 Поскольку имя хоста google.com, его там не будет, но если бы оно было, браузер применил бы кодировку Punycode к части URL, содержащей имя хоста.
 
-Check HSTS list
+Check HSTS list  
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
 If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)
-Проверьте список HSTS
+Проверьте список HSTS  
 Браузер проверяет свой список "предварительно загруженных HSTS (HTTP Strict Transport Security)". Это список веб-сайтов, которые запросили доступ только по протоколу HTTPS.
 Если веб-сайт есть в списке, браузер отправляет запрос по протоколу HTTPS, а не по протоколу HTTP. В противном случае первоначальный запрос отправляется по протоколу HTTP. (Обратите внимание, что веб-сайт все равно может использовать политику HSTS, не находясь в списке HSTS. При первом HTTP-запросе пользователя к веб-сайту будет получен ответ с просьбой отправлять только HTTPS-запросы. Однако этот единственный HTTP-запрос потенциально может сделать пользователя уязвимым для атаки с понижением версии, поэтому в современных веб-браузерах включен список HSTS.)
 
-DNS lookup
+DNS lookup  
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
 If gethostbyname does not have it cached nor can find it in the hosts file then it makes a request to the DNS server configured in the network stack. This is typically the local router or the ISP's caching DNS server.
 If the DNS server is on the same subnet the network library follows the ARP process below for the DNS server.
 If the DNS server is on a different subnet, the network library follows the ARP process below for the default gateway IP.
-ARP process
+
+ARP process  
 In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.
 
 The ARP cache is first checked for an ARP entry for our target IP. If it is in the cache, the library function returns the result: Target IP = MAC.
-
+  
 If the entry is not in the ARP cache:
-
+  
 The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway.
 The MAC address of the selected network interface is looked up.
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
-ARP Request:
 
-Sender MAC: interface:mac:address:here
-Sender IP: interface.ip.goes.here
-Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)
-Target IP: target.ip.goes.here
-Depending on what type of hardware is between the computer and the router:
+ARP Request:  
 
-Directly connected:
+Sender MAC: interface:mac:address:here  
+Sender IP: interface.ip.goes.here  
+Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
+Target IP: target.ip.goes.here  
+Depending on what type of hardware is between the computer and the router:  
+
+Directly connected:  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below)
-Hub:
+Hub:  
 
 If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).
-Switch:
+Switch:  
 
 If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.
 If the switch has an entry in the MAC/CAM table it will send the ARP request to the port that has the MAC address we are looking for.
 If the router is on the same "wire", it will respond with an ARP Reply (see below)
-ARP Reply:
 
-Sender MAC: target:mac:address:here
-Sender IP: target.ip.goes.here
-Target MAC: interface:mac:address:here
-Target IP: interface.ip.goes.here
-Now that the network library has the IP address of either our DNS server or the default gateway it can resume its DNS process:
+ARP Reply:  
+
+Sender MAC: target:mac:address:here  
+Sender IP: target.ip.goes.here  
+Target MAC: interface:mac:address:here  
+Target IP: interface.ip.goes.here  
+Now that the network library has the IP address of either our DNS server or the default gateway it can resume its DNS process:  
 
 The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.
 If the response size is too large, TCP will be used instead.
