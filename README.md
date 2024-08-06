@@ -121,14 +121,26 @@ Resource "/"
 Retrieve main (index) page
 Is it a URL or a search term?
 When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
+Протокол "http"
+Используйте "Протокол передачи гипертекста"
+Ресурс "/"
+Извлеките главную (индексную) страницу
+Это URL-адрес или поисковый запрос?
+Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.
 
 Convert non-ASCII Unicode characters in the hostname
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
 Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.
+Преобразуйте символы Юникода, отличные от ASCII, в имя хоста
+Браузер проверяет имя хоста на наличие символов, отличных от a-z, A-Z, 0-9, -, или ..
+Поскольку имя хоста google.com, его там не будет, но если бы оно было, браузер применил бы кодировку Punycode к части URL, содержащей имя хоста.
 
 Check HSTS list
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
 If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)
+Проверьте список HSTS
+Браузер проверяет свой список "предварительно загруженных HSTS (HTTP Strict Transport Security)". Это список веб-сайтов, которые запросили доступ только по протоколу HTTPS.
+Если веб-сайт есть в списке, браузер отправляет запрос по протоколу HTTPS, а не по протоколу HTTP. В противном случае первоначальный запрос отправляется по протоколу HTTP. (Обратите внимание, что веб-сайт все равно может использовать политику HSTS, не находясь в списке HSTS. При первом HTTP-запросе пользователя к веб-сайту будет получен ответ с просьбой отправлять только HTTPS-запросы. Однако этот единственный HTTP-запрос потенциально может сделать пользователя уязвимым для атаки с понижением версии, поэтому в современных веб-браузерах включен список HSTS.)
 
 DNS lookup
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
