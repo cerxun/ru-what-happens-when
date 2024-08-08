@@ -147,11 +147,21 @@ Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, g
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
 If gethostbyname does not have it cached nor can find it in the hosts file then it makes a request to the DNS server configured in the network stack. This is typically the local router or the ISP's caching DNS server.
+Поиск по DNS
+Браузер проверяет, есть ли домен в его кэше. (чтобы просмотреть кэш DNS в Chrome, перейдите по ссылке chrome://net-internals/#dns).
+Если он не найден, браузер вызывает библиотечную функцию gethostbyname (зависит от операционной системы) для выполнения поиска.
+gethostbyname проверяет, можно ли разрешить имя хоста по ссылке в локальном файле hosts (расположение которого зависит от операционной системы), прежде чем пытаться разрешить имя хоста через DNS.
+Если gethostbyname не сохранен в кэше и не может быть найден в файле hosts, он отправляет запрос на DNS-сервер, настроенный в сетевом стеке. Обычно это локальный маршрутизатор или кэширующий DNS-сервер интернет-провайдера.
+
 If the DNS server is on the same subnet the network library follows the ARP process below for the DNS server.
 If the DNS server is on a different subnet, the network library follows the ARP process below for the default gateway IP.
+Если DNS-сервер находится в той же подсети, сетевая библиотека выполняет описанный ниже процесс ARP для DNS-сервера.
+Если DNS-сервер находится в другой подсети, сетевая библиотека выполняет описанный ниже процесс ARP для IP-адреса шлюза по умолчанию.  
 
 ARP process  
 In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.
+Процесс ARP
+Для отправки широковещательной передачи по протоколу ARP (протокол разрешения адресов) библиотеке сетевого стека необходим целевой IP-адрес для поиска. Ей также необходимо знать MAC-адрес интерфейса, который она будет использовать для отправки широковещательной передачи по протоколу ARP.  
 
 The ARP cache is first checked for an ARP entry for our target IP. If it is in the cache, the library function returns the result: Target IP = MAC.
   
