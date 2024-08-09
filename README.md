@@ -186,18 +186,28 @@ Sender IP: interface.ip.goes.here
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
 Target IP: target.ip.goes.here  
 Depending on what type of hardware is between the computer and the router:  
+В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
 
 Directly connected:  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below)
 Hub:  
+Прямое подключение:  
+
+Если компьютер напрямую подключен к маршрутизатору, маршрутизатор ответит ARP-ответом (см. ниже).
+Хаб:  
 
 If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).
 Switch:  
+Если компьютер подключен к концентратору, концентратор будет транслировать запрос ARP со всех других портов. Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).
+Переключатель:  
 
 If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.
 If the switch has an entry in the MAC/CAM table it will send the ARP request to the port that has the MAC address we are looking for.
 If the router is on the same "wire", it will respond with an ARP Reply (see below)
+Если компьютер подключен к коммутатору, коммутатор проверит свою локальную таблицу CAM/MAC, чтобы узнать, какой порт содержит искомый MAC-адрес. Если у коммутатора нет данных для MAC-адреса, он повторно передаст запрос ARP на все остальные порты.
+Если у коммутатора есть запись в таблице MAC/CAM, он отправит запрос ARP на порт, который имеет искомый MAC-адрес.
+Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 
 ARP Reply:  
 
