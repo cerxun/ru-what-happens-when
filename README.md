@@ -94,6 +94,7 @@ Win32K.sys figures out what window is the active window through the GetForegroun
 The Windows SendMessage API is a straightforward function that adds the message to a queue for the particular window handle (hWnd). Later, the main message processing function (called a WindowProc) assigned to the hWnd is called in order to process each message in the queue.
 
 The window (hWnd) that is active is actually an edit control and the WindowProc in this case has a message handler for WM_KEYDOWN messages. This code looks within the 3rd parameter that was passed to SendMessage (wParam) and, because it is VK_RETURN knows the user has hit the ENTER key.
+
 (В Windows) В приложение отправляется сообщение WM_KEYDOWN
 Транспорт HID передает событие нажатия клавиши драйверу KBDHID.sys, который преобразует использование HID в скан-код. В данном случае скан-кодом является VK_RETURN (0x0D). Драйвер KBDHID.sys взаимодействует с KBDCLASS.sys (драйвер класса клавиатуры). Этот драйвер отвечает за безопасную обработку всех данных, вводимых с клавиатуры. Затем он обращается к Win32K.sys (возможно, после прохождения сообщения через установленные фильтры клавиатуры сторонних производителей). Все это происходит в режиме ядра.
 Win32K.sys определяет, какое окно является активным, с помощью API GetForegroundWindow(). Этот API предоставляет дескриптор окна для адресной строки браузера. Затем основной "поток сообщений" Windows вызывает SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam - это битовая маска, которая указывает дополнительную информацию о нажатии клавиши: количество повторений (в данном случае 0), фактический код сканирования (может зависеть от производителя, но, как правило, не относится к VK_RETURN), были ли также нажаты дополнительные клавиши (например, alt, shift, ctrl) (они не были нажаты), и какое-то другое государство.
@@ -170,6 +171,13 @@ If the entry is not in the ARP cache:
 The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway.
 The MAC address of the selected network interface is looked up.
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
+Сначала кэш ARP проверяется на наличие записи ARP для нашего целевого IP. Если она есть в кэше, библиотечная функция возвращает результат: Целевой IP = MAC.
+  
+Если записи нет в кэше ARP:
+  
+Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию.
+Выполняется поиск MAC-адреса выбранного сетевого интерфейса.
+Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):
 
 ARP Request:  
 
