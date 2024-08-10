@@ -347,27 +347,22 @@ HTTP/1.1 определяет параметр "закрыть" соединен
 Приложения HTTP/1.1, которые не поддерживают постоянные соединения, должны включать параметр "закрыть" соединение в каждое сообщение.  
 
 After sending the request and headers, the web browser sends a single blank newline to the server indicating that the content of the request is done.  
+После отправки запроса и заголовков веб-браузер отправляет на сервер одну пустую строку перевода текста, указывающую на то, что содержание запроса выполнено.  
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
-
 200 OK
 [response headers]
-Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.
+Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
+If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
+304 Not Modified  
+[response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
 
-If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:
+After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
+If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
 
-304 Not Modified
-[response headers]
-and no payload, and the web browser instead retrieve the HTML from its cache.
-
-After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.
-
-If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.
-
-HTTP Server Request Handle
-The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.
-
-The HTTPD (HTTP Daemon) receives the request.
+HTTP Server Request Handle  
+The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.  
+The HTTPD (HTTP Daemon) receives the request.  
 The server breaks down the request to the following parameters:
 HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
 Domain, in this case - google.com.
@@ -381,67 +376,52 @@ The server parses the file according to the handler. If Google is running on PHP
 Behind the scenes of the Browser
 Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:
 
-Parsing - HTML, CSS, JS
-Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree
-Browser
-The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).
+Parsing - HTML, CSS, JS  
+Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
+The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
 
-The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.
+The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.  
 
-Browser user interfaces have a lot in common with each other. Among the common user interface elements are:
+Browser user interfaces have a lot in common with each other. Among the common user interface elements are:  
+An address bar for inserting a URI  
+Back and forward buttons  
+Bookmarking options  
+Refresh and stop buttons for refreshing or stopping the loading of current documents  
+Home button that takes you to your home page  
+Browser High-Level Structure  
 
-An address bar for inserting a URI
-Back and forward buttons
-Bookmarking options
-Refresh and stop buttons for refreshing or stopping the loading of current documents
-Home button that takes you to your home page
-Browser High-Level Structure
-
-The components of the browsers are:
-
+The components of the browsers are:  
 User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.
 Browser engine: The browser engine marshals actions between the UI and the rendering engine.
 Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.
 Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
 UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.
 JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.
-Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.
+Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
 
-HTML parsing
-The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.
-
-The primary job of the HTML parser is to parse the HTML markup into a parse tree.
-
+HTML parsing  
+The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
+The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
 The output tree (the "parse tree") is a tree of DOM element and attribute nodes. DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript. The root of the tree is the "Document" object. Prior to any manipulation via scripting, the DOM has an almost one-to-one relation to the markup.
+The parsing algorithm HTML cannot be parsed using the regular top-down or bottom-up parsers.  
 
-The parsing algorithm
+The reasons are:  
+The forgiving nature of the language.  
+The fact that browsers have traditional error tolerance to support well known cases of invalid HTML.  
+The parsing process is reentrant. For other languages, the source doesn't change during parsing, but in HTML, dynamic code (such as script elements containing document.write() calls) can add extra tokens, so the parsing process actually modifies the input.  
+Unable to use the regular parsing techniques, the browser utilizes a custom parser for parsing HTML. The parsing algorithm is described in detail by the HTML5 specification.  
+The algorithm consists of two stages: tokenization and tree construction.  
+Actions when the parsing is finished  
+The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).  
+At this stage the browser marks the document as interactive and starts parsing scripts that are in "deferred" mode: those that should be executed after the document is parsed. The document state is set to "complete" and a "load" event is fired.  
+Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.  
 
-HTML cannot be parsed using the regular top-down or bottom-up parsers.
+CSS interpretation  
+Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"  
+Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.  
+A CSS parser can be top-down or bottom-up when a specific parser generator is used.  
 
-The reasons are:
-
-The forgiving nature of the language.
-The fact that browsers have traditional error tolerance to support well known cases of invalid HTML.
-The parsing process is reentrant. For other languages, the source doesn't change during parsing, but in HTML, dynamic code (such as script elements containing document.write() calls) can add extra tokens, so the parsing process actually modifies the input.
-Unable to use the regular parsing techniques, the browser utilizes a custom parser for parsing HTML. The parsing algorithm is described in detail by the HTML5 specification.
-
-The algorithm consists of two stages: tokenization and tree construction.
-
-Actions when the parsing is finished
-
-The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).
-
-At this stage the browser marks the document as interactive and starts parsing scripts that are in "deferred" mode: those that should be executed after the document is parsed. The document state is set to "complete" and a "load" event is fired.
-
-Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.
-
-CSS interpretation
-
-Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"
-Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.
-A CSS parser can be top-down or bottom-up when a specific parser generator is used.
-
-Page Rendering
+Page Rendering  
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
 Calculate the actual width of each node top-down by allocating each node's available width to its children.
@@ -453,12 +433,12 @@ Textures are allocated for each layer of the page.
 The frame/render objects for each layer are traversed and drawing commands are executed for their respective layer. This may be rasterized by the CPU or drawn on the GPU directly using D2D/SkiaGL.
 All of the above steps may reuse calculated values from the last time the webpage was rendered, so that incremental changes require less work.
 The page layers are sent to the compositing process where they are combined with layers for other visible content like the browser chrome, iframes and addon panels.
-Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.
+Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.  
 
-GPU Rendering
-During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.
-When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.
-Window Server
-Post-rendering and user-induced execution
-
-After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.
+GPU Rendering  
+During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.  
+When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.  
+  
+Window Server  
+Post-rendering and user-induced execution  
+After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
