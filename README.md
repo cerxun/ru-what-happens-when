@@ -343,10 +343,12 @@ where [other headers] refers to a series of colon-separated key-value pairs form
 
 HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example, Connection: close
 HTTP/1.1 applications that do not support persistent connections MUST include the "close" connection option in every message.  
+HTTP/1.1 определяет параметр "закрыть" соединение, чтобы отправитель мог сигнализировать о том, что соединение будет закрыто после завершения ответа. Например, Connection: закрыть
+Приложения HTTP/1.1, которые не поддерживают постоянные соединения, должны включать параметр "закрыть" соединение в каждое сообщение.  
 
-After sending the request and headers, the web browser sends a single blank newline to the server indicating that the content of the request is done.
+After sending the request and headers, the web browser sends a single blank newline to the server indicating that the content of the request is done.  
 
-The server responds with a response code denoting the status of the request and responds with a response of the form:
+The server responds with a response code denoting the status of the request and responds with a response of the form:  
 
 200 OK
 [response headers]
