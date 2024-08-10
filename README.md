@@ -320,8 +320,13 @@ For each packet acknowledged, the window doubles in size until it reaches the 's
 After reaching the slow-start threshold, the window increases additively for each packet acknowledged. If a packet is dropped, the window reduces exponentially until another packet is acknowledged.
 HTTP protocol  
 If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
+Клиент выбирает время перегрузки на основе максимального размера сегмента (MSS) соединения.
+Для каждого подтвержденного пакета размер окна увеличивается вдвое, пока не достигнет "порога медленного запуска". В некоторых реализациях этот порог является адаптивным.
+После достижения порогового значения медленного запуска окно увеличивается для каждого подтвержденного пакета. Если пакет отбрасывается, окно уменьшается экспоненциально до тех пор, пока не будет подтвержден другой пакет.
+Протокол HTTP  
+Если используемый веб-браузер был создан компанией Google, то вместо отправки HTTP-запроса для получения страницы он отправит запрос на попытку согласовать с сервером "обновление" с HTTP до протокола SPDY.  
 
-If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:
+If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
 
 GET / HTTP/1.1
 Host: google.com
