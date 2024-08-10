@@ -327,16 +327,16 @@ If the web browser used was written by Google, instead of sending an HTTP reques
 Если используемый веб-браузер был создан компанией Google, то вместо отправки HTTP-запроса для получения страницы он отправит запрос на попытку согласовать с сервером "обновление" с HTTP до протокола SPDY.  
 
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
+Если клиент использует протокол HTTP и не поддерживает SPDY, он отправляет запрос на сервер вида:  
 
-GET / HTTP/1.1
-Host: google.com
-Connection: close
-[other headers]
-where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)
+GET / HTTP/1.1  
+Host: google.com  
+Connection: close  
+[other headers]  
 
-HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example,
+where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)  
 
-Connection: close
+HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after completion of the response. For example, Connection: close
 HTTP/1.1 applications that do not support persistent connections MUST include the "close" connection option in every message.
 
 After sending the request and headers, the web browser sends a single blank newline to the server indicating that the content of the request is done.
