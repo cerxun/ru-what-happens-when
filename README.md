@@ -1,4 +1,4 @@
-# ru-what-happens-when
+# RU-What-happens-When
 What happens when on Russian
 Что происходит когда ... (русская версия)
 
