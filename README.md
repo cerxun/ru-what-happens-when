@@ -259,6 +259,7 @@ Eventually, the packet will reach the router managing the local subnet. From the
 В конце концов, пакет достигнет маршрутизатора, управляющего локальной подсетью. Оттуда он продолжит путь к пограничным маршрутизаторам автономной системы (AS), в других случаях и, наконец, к целевому серверу. Каждый маршрутизатор на своем пути извлекает адрес назначения из IP-заголовка и перенаправляет его на соответствующий следующий переход. Поле time to live (TTL) в IP-заголовке уменьшается на единицу для каждого проходящего маршрутизатора. Пакет будет отброшен, если поле TTL достигнет нуля или если у текущего маршрутизатора не будет свободного места в очереди (возможно, из-за перегрузки сети).  
 
 This send and receive happens multiple times following the TCP connection flow:  
+Эта отправка и получение происходят несколько раз в соответствии с потоком TCP-соединений:  
 
 Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN
 Server receives SYN and if it's in an agreeable mood:
