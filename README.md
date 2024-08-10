@@ -294,7 +294,8 @@ Closer отправляет пакет FIN
 Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN
 Closer подтверждает подтверждение FIN другой стороны  
 
-TLS handshake
+TLS handshake  
+Рукопожатие по протоколу TLS 
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
 The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
 The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.
@@ -303,13 +304,22 @@ The client sends a Finished message to the server, encrypting a hash of the tran
 The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.
 From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.
 If a packet is dropped
-Sometimes, due to network congestion or flaky hardware connections, TLS packets will be dropped before they get to their final destination. The sender then has to decide how to react. The algorithm for this is called TCP congestion control. This varies depending on the sender; the most common algorithms are cubic on newer operating systems and New Reno on almost all others.
+Sometimes, due to network congestion or flaky hardware connections, TLS packets will be dropped before they get to their final destination. The sender then has to decide how to react. The algorithm for this is called TCP congestion control. This varies depending on the sender; the most common algorithms are cubic on newer operating systems and New Reno on almost all others.  
+Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.
+Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, выбранными методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
+Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
+Сервер расшифровывает случайные байты с помощью своего закрытого ключа и использует эти байты для создания собственной копии симметричного мастер-ключа.
+Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.
+Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.
+С этого момента сеанс TLS передает данные приложения (HTTP), зашифрованные с помощью согласованного симметричного ключа.
+Если пакет пропущен
+Иногда из-за перегрузки сети или сбоев в подключении оборудования пакеты TLS отбрасываются до того, как они дойдут до конечного пункта назначения. Затем отправитель должен решить, как реагировать. Алгоритм для этого называется TCP congestion control. Это зависит от отправителя; наиболее распространенными алгоритмами являются cubic в новых операционных системах и New Reno почти во всех остальных.  
 
 Client chooses a congestion window based on the maximum segment size (MSS) of the connection.
 For each packet acknowledged, the window doubles in size until it reaches the 'slow-start threshold'. In some implementations, this threshold is adaptive.
 After reaching the slow-start threshold, the window increases additively for each packet acknowledged. If a packet is dropped, the window reduces exponentially until another packet is acknowledged.
-HTTP protocol
-If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.
+HTTP protocol  
+If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
 
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:
 
