@@ -78,8 +78,8 @@ Then the mobile OS notifies the currently focused application of a press event i
 The virtual keyboard can now raise a software interrupt for sending a 'key pressed' message back to the OS.
 This interrupt notifies the currently focused application of a 'key pressed' event.
 Interrupt fires [NOT for USB keyboards]
-The keyboard sends signals on its interrupt request line (IRQ), which is mapped to an interrupt vector (integer) by the interrupt controller. The CPU uses the Interrupt Descriptor Table (IDT) to map the interrupt vectors to functions (interrupt handlers) which are supplied by the kernel. When an interrupt arrives, the CPU indexes the IDT with the interrupt vector and runs the appropriate handler. Thus, the kernel is entered.
-  Когда пользователь прикасается пальцем к современному емкостному сенсорному экрану, к пальцу передается небольшое количество тока. Это замыкает цепь через электростатическое поле проводящего слоя и создает падение напряжения в этой точке экрана. Затем экранный контроллер выдает прерывание, сообщающее о координате нажатия клавиши.
+The keyboard sends signals on its interrupt request line (IRQ), which is mapped to an interrupt vector (integer) by the interrupt controller. The CPU uses the Interrupt Descriptor Table (IDT) to map the interrupt vectors to functions (interrupt handlers) which are supplied by the kernel. When an interrupt arrives, the CPU indexes the IDT with the interrupt vector and runs the appropriate handler. Thus, the kernel is entered.  
+Когда пользователь прикасается пальцем к современному емкостному сенсорному экрану, к пальцу передается небольшое количество тока. Это замыкает цепь через электростатическое поле проводящего слоя и создает падение напряжения в этой точке экрана. Затем экранный контроллер выдает прерывание, сообщающее о координате нажатия клавиши.
 Затем мобильная операционная система уведомляет приложение, на котором в данный момент сосредоточено внимание, о событии нажатия в одном из элементов графического интерфейса (который теперь является кнопками приложения виртуальной клавиатуры).
 Виртуальная клавиатура теперь может вызывать программное прерывание для отправки сообщения "нажата клавиша" обратно в операционную систему.
 Это прерывание уведомляет текущее приложение о событии "нажата клавиша".
@@ -210,12 +210,18 @@ If the router is on the same "wire", it will respond with an ARP Reply (see belo
 Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 
 ARP Reply:  
+ARP-ответ:  
 
 Sender MAC: target:mac:address:here  
 Sender IP: target.ip.goes.here  
 Target MAC: interface:mac:address:here  
 Target IP: interface.ip.goes.here  
 Now that the network library has the IP address of either our DNS server or the default gateway it can resume its DNS process:  
+MAC отправителя: адрес назначения:mac-адрес:здесь  
+IP отправителя: target.ip.goes.здесь  
+Целевой MAC: интерфейс:mac:адрес:здесь  
+Целевой IP: interface.ip.goes.здесь  
+Теперь, когда у сетевой библиотеки есть IP-адрес либо нашего DNS-сервера, либо шлюза по умолчанию, она может возобновить процесс tsDNS:  
 
 The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.
 If the response size is too large, TCP will be used instead.
