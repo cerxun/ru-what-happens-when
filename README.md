@@ -276,7 +276,8 @@ When the other side acknowledges receipt of that packet (or a string of packets)
 To close the connection:
 The closer sends a FIN packet
 The other sides ACKs the FIN packet and sends its own FIN
-The closer acknowledges the other side's FIN with an ACK  
+The closer acknowledges the other side's FIN with an ACK   
+
 Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
 Сервер получает SYN и, если он в хорошем настроении:
 Сервер сам выбирает свой начальный порядковый номер
@@ -305,6 +306,7 @@ The server generates its own hash, and then decrypts the client-sent hash to ver
 From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.
 If a packet is dropped
 Sometimes, due to network congestion or flaky hardware connections, TLS packets will be dropped before they get to their final destination. The sender then has to decide how to react. The algorithm for this is called TCP congestion control. This varies depending on the sender; the most common algorithms are cubic on newer operating systems and New Reno on almost all others.  
+
 Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.
 Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, выбранными методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
 Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
@@ -318,8 +320,7 @@ Sometimes, due to network congestion or flaky hardware connections, TLS packets 
 Client chooses a congestion window based on the maximum segment size (MSS) of the connection.
 For each packet acknowledged, the window doubles in size until it reaches the 'slow-start threshold'. In some implementations, this threshold is adaptive.
 After reaching the slow-start threshold, the window increases additively for each packet acknowledged. If a packet is dropped, the window reduces exponentially until another packet is acknowledged.
-HTTP protocol  
-If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
+HTTP protocol. If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
 Клиент выбирает время перегрузки на основе максимального размера сегмента (MSS) соединения.
 Для каждого подтвержденного пакета размер окна увеличивается вдвое, пока не достигнет "порога медленного запуска". В некоторых реализациях этот порог является адаптивным.
 После достижения порогового значения медленного запуска окно увеличивается для каждого подтвержденного пакета. Если пакет отбрасывается, окно уменьшается экспоненциально до тех пор, пока не будет подтвержден другой пакет.
@@ -337,7 +338,6 @@ Connection: close
 Хост: google.com  
 Соединение: закрыть  
 [другие заголовки]  
-
 where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)  
 где [другие заголовки] относятся к серии пар ключ-значение, разделенных двоеточием, отформатированных в соответствии со спецификацией HTTP и разделенных отдельными символами новой строки. (Предполагается, что в используемом веб-браузере нет ошибок, нарушающих спецификацию HTTP. Это также предполагает, что веб-браузер использует HTTP/1.1, в противном случае он может не включать заголовок Host в запрос, и версия, указанная в запросе GET, будет либо HTTP/1.0, либо HTTP/0.9.)  
 
@@ -350,17 +350,27 @@ After sending the request and headers, the web browser sends a single blank newl
 После отправки запроса и заголовков веб-браузер отправляет на сервер одну пустую строку перевода текста, указывающую на то, что содержание запроса выполнено.  
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
+Сервер выдает код ответа, обозначающий статус запроса, и выдает ответ следующего вида:  
 200 OK
 [response headers]
 Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
 If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
+200 ОК
+[заголовки ответа]
+За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
+Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
+
 304 Not Modified  
 [response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
-
 After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
+304 Не изменено  
+[заголовки ответов] и нет полезной нагрузки, а веб-браузер вместо этого извлекает HTML из своего кэша.  
+После синтаксического анализа HTML веб-браузер (и сервер) повторяет этот процесс для каждого ресурса (изображения, CSS, favicon.ico и т.д.), на который ссылается HTML-страница, за исключением того, что вместо GET / HTTP/1.1 запрос будет GET /$(URL относительно www.google.com) HTTP/1.1.  
+Если HTML-код ссылается на ресурс, расположенный в домене, отличном от www.google.com, веб-браузер возвращается к шагам, связанным с разрешением доступа к другому домену, и выполняет все действия до этого момента для этого домена. В заголовке Host в запросе будет указано соответствующее имя сервера вместо google.com.  
 
 HTTP Server Request Handle  
+Дескриптор запроса HTTP-сервера  
 The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.  
 The HTTPD (HTTP Daemon) receives the request.  
 The server breaks down the request to the following parameters:
@@ -374,13 +384,32 @@ If the server has a rewrite module installed (like mod_rewrite for Apache or URL
 The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).
 The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.
 Behind the scenes of the Browser
-Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:
+Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
+Сервер HTTPD (HTTP-демон) обрабатывает запросы и ответы на стороне сервера. Наиболее распространенными HTTPD-серверами являются Apache или nginx для Linux и IIS для Windows.  
+Запрос получает HTTPD (HTTP-демон).  
+Сервер разбивает запрос на следующие параметры:
+Метод HTTP-запроса (GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
+Домен, в данном случае - google.com.
+Запрашиваемый путь/страница, в данном случае - / (поскольку конкретный путь/страница не запрашивались, по умолчанию используется путь /).
+Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.
+Сервер проверяет, может ли google.com принимать запросы GET.
+Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).
+Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.
+Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).
+Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.
+За кулисами браузера
+Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
 Parsing - HTML, CSS, JS  
+Синтаксический анализ - HTML, CSS, JS  
+
 Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
+Рендеринг - Построение дерева DOM → Дерево рендеринга → Макет дерева рендеринга → Отображение дерева рендеринга в браузере  
+Функциональность браузера заключается в представлении выбранного вами веб-ресурса путем запроса его с сервера и отображения в окне браузера. Ресурс обычно представляет собой HTML-документ, но также может быть в формате PDF, с изображением или каким-либо другим типом содержимого. Местоположение ресурса определяется пользователем с помощью URI (Uniform Resource Identifier).  
 
 The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.  
+Способ, которым браузер интерпретирует и отображает HTML-файлы, указан в спецификациях HTML и CSS. Эти спецификации поддерживаются организацией W3C (World Wide Web Consortium), которая является организацией по стандартизации в Интернете.  
 
 Browser user interfaces have a lot in common with each other. Among the common user interface elements are:  
 An address bar for inserting a URI  
