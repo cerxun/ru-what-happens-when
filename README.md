@@ -1,4 +1,4 @@
-# RU-What-happens-When
+# RU-What-Happens-When
 What happens when on Russian
 Что происходит когда ... (русская версия)
 
@@ -276,7 +276,23 @@ When the other side acknowledges receipt of that packet (or a string of packets)
 To close the connection:
 The closer sends a FIN packet
 The other sides ACKs the FIN packet and sends its own FIN
-The closer acknowledges the other side's FIN with an ACK
+The closer acknowledges the other side's FIN with an ACK  
+Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
+Сервер получает SYN и, если он в хорошем настроении:
+Сервер сам выбирает свой начальный порядковый номер
+Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN
+Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета
+Клиент подтверждает соединение, отправляя пакет:
+Увеличивает свой собственный порядковый номер
+Увеличивает номер подтверждения получателя
+Устанавливает поле подтверждения
+Передача данных осуществляется следующим образом:
+Когда одна сторона отправляет N байт данных, она увеличивает свой SEQ на это число
+Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны
+Чтобы закрыть соединение:
+Closer отправляет пакет FIN
+Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN
+Closer подтверждает подтверждение FIN другой стороны  
 
 TLS handshake
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
