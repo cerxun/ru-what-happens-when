@@ -243,10 +243,14 @@ At this point the packet is ready to be transmitted through either:
 Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.
 На этом этапе пакет готов к передаче через любой из:
 
-Ethernet
-WiFi
-Cellular data network
-For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.
+Ethernet  
+WiFi  
+Cellular data network  
+Локальная сеть  
+Wi-Fi  
+Сотовая сеть передачи данных  
+For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.  
+Для большинства подключений к Интернету для дома или малого бизнеса пакет передается с вашего компьютера, возможно, через локальную сеть, а затем через модем (модулятор/демодулятор), который преобразует цифровые 1 и 0 в аналоговый сигнал, пригодный для передачи по телефонным, кабельным или беспроводным телефонным соединениям. На другом конце соединения находится другой модем, который преобразует аналоговый сигнал обратно в цифровые данные для обработки следующим узлом сети, где адреса "от" и "к" будут проанализированы дополнительно.  
 
 Most larger businesses and some newer residential connections will have fiber or direct Ethernet connections in which case the data remains digital and is passed directly to the next network node for processing.
 
