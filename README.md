@@ -256,8 +256,9 @@ Most larger businesses and some newer residential connections will have fiber or
 Большинство крупных предприятий и некоторые новые жилые дома имеют оптоволоконные или прямые Ethernet-соединения, и в этом случае данные остаются цифровыми и передаются непосредственно на следующий сетевой узел для обработки.  
 
 Eventually, the packet will reach the router managing the local subnet. From there, it will continue to travel to the autonomous system's (AS) border routers, other ASes, and finally to the destination server. Each router along the way extracts the destination address from the IP header and routes it to the appropriate next hop. The time to live (TTL) field in the IP header is decremented by one for each router that passes. The packet will be dropped if the TTL field reaches zero or if the current router has no space in its queue (perhaps due to network congestion).  
+В конце концов, пакет достигнет маршрутизатора, управляющего локальной подсетью. Оттуда он продолжит путь к пограничным маршрутизаторам автономной системы (AS), в других случаях и, наконец, к целевому серверу. Каждый маршрутизатор на своем пути извлекает адрес назначения из IP-заголовка и перенаправляет его на соответствующий следующий переход. Поле time to live (TTL) в IP-заголовке уменьшается на единицу для каждого проходящего маршрутизатора. Пакет будет отброшен, если поле TTL достигнет нуля или если у текущего маршрутизатора не будет свободного места в очереди (возможно, из-за перегрузки сети).  
 
-This send and receive happens multiple times following the TCP connection flow:
+This send and receive happens multiple times following the TCP connection flow:  
 
 Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN
 Server receives SYN and if it's in an agreeable mood:
