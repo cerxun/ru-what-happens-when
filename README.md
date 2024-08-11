@@ -488,6 +488,13 @@ Calculate the actual width of each node top-down by allocating each node's avail
 Calculate the height of each node bottom-up by applying text wrapping and summing the child node heights and the node's margins, borders, and padding.
 Calculate the coordinates of each node using the information calculated above.
 More complicated steps are taken when elements are floated, positioned absolutely or relatively, or other complex features are used. See http://dev.w3.org/csswg/css2/ and http://www.w3.org/Style/CSS/current-work for more details.  
+Рендеринг страницы  
+Создайте "Дерево фреймов" или "Дерево рендеринга", пройдя по узлам DOM и вычислив значения стиля CSS для каждого узла.
+Вычислите предпочтительную ширину каждого узла в "Дереве фреймов" снизу вверх, суммируя предпочтительную ширину дочерних узлов и горизонтальные поля, границы и отступы узла.
+Вычислите фактическую ширину каждого узла сверху вниз, распределив доступную ширину каждого узла между его дочерними узлами.
+Рассчитайте высоту каждого узла снизу вверх, применяя перенос текста и суммируя высоты дочерних узлов, а также поля, границы и отступы узла.
+Рассчитайте координаты каждого узла, используя информацию, полученную выше.
+Более сложные действия выполняются при перемещении элементов, их абсолютном или относительном расположении или при использовании других сложных функций. Более подробную информацию смотрите в разделах http://dev.w3.org/csswg/css2/ и http://www.w3.org/Style/CSS/current-work.  
 
 Create layers to describe which parts of the page can be animated as a group without being re-rasterized. Each frame/render object is assigned to a layer.
 Textures are allocated for each layer of the page.
