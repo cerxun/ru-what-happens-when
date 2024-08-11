@@ -172,15 +172,12 @@ The route table is looked up, to see if the Target IP address is on any of the s
 The MAC address of the selected network interface is looked up.
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
 Сначала кэш ARP проверяется на наличие записи ARP для нашего целевого IP. Если она есть в кэше, библиотечная функция возвращает результат: Целевой IP = MAC.
-  
 Если записи нет в кэше ARP:
-  
 Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию.
 Выполняется поиск MAC-адреса выбранного сетевого интерфейса.
 Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):
 
 ARP Request:  
-
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
@@ -418,6 +415,13 @@ Bookmarking options
 Refresh and stop buttons for refreshing or stopping the loading of current documents  
 Home button that takes you to your home page  
 Browser High-Level Structure  
+Пользовательские интерфейсы браузеров имеют много общего друг с другом. К числу общих элементов пользовательского интерфейса относятся:  
+Адресная строка для ввода URI  
+Кнопки "Назад" и "Вперед"  
+Параметры закладок  
+Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
+Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
+Высокоуровневая структура браузера  
 
 The components of the browsers are:  
 User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.
