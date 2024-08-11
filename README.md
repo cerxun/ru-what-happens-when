@@ -502,11 +502,23 @@ The frame/render objects for each layer are traversed and drawing commands are e
 All of the above steps may reuse calculated values from the last time the webpage was rendered, so that incremental changes require less work.
 The page layers are sent to the compositing process where they are combined with layers for other visible content like the browser chrome, iframes and addon panels.
 Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.  
+Создайте слои, чтобы описать, какие части страницы можно анимировать как группу, не подвергая их повторной растеризации. Каждый кадр/объект рендеринга присваивается слою.
+Текстуры выделяются для каждого слоя страницы.
+Выполняется обход объектов кадрирования/рендеринга для каждого слоя и выполняются команды рисования для соответствующего слоя. Это может быть растеризовано центральным процессором или отрисовано непосредственно на графическом процессоре с использованием D2D/SkiaGL.
+Все вышеперечисленные действия могут уменьшить вычисленные значения с момента последнего отображения веб-страницы, так что постепенные изменения потребуют меньше усилий.
+Слои страницы отправляются в процесс компоновки, где они объединяются со слоями для другого видимого контента, такого как браузер chrome, iframes и дополнительные панели.
+Вычисляются окончательные позиции слоев и выполняются команды компоновки с помощью Direct3D/OpenGL. Буферы команд графического процессора загружаются в графический процессор для асинхронного рендеринга, и кадр отправляется на оконный сервер. 
 
 GPU Rendering  
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.  
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.  
+Рендеринг на GPU  
+В процессе рендеринга графические вычислительные уровни также могут использовать CPU общего назначения или графический процессор GPU.  
+При использовании графического процессора для вычислений графического рендеринга уровни графического программного обеспечения разделяют задачу на несколько частей, что позволяет использовать преимущества массового параллелизма графического процессора для вычислений с плавающей запятой, необходимых для процесса рендеринга.  
   
 Window Server  
 Post-rendering and user-induced execution  
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
+Оконный сервер  
+Последующий рендеринг и выполнение под управлением пользователя  
+После завершения рендеринга браузер выполняет код JavaScript в результате некоторого механизма синхронизации (например, анимации Google Doodle) или взаимодействия с пользователем (ввод запроса в поле поиска и получение предложений). Плагины, такие как Flash или Java, также могут запускаться, хотя в данный момент их нет на главной странице Google. Скрипты могут вызывать выполнение дополнительных сетевых запросов, а также изменять страницу или ее макет, вызывая повторный цикл рендеринга и перерисовки страницы.  
