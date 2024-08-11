@@ -461,6 +461,16 @@ Actions when the parsing is finished
 The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).  
 At this stage the browser marks the document as interactive and starts parsing scripts that are in "deferred" mode: those that should be executed after the document is parsed. The document state is set to "complete" and a "load" event is fired.  
 Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.  
+Причины в том, что:  
+Язык прост в использовании.  
+Тот факт, что браузеры традиционно допускают ошибки для поддержки хорошо известных случаев некорректного HTML.  
+Процесс синтаксического анализа является повторным. Для других языков исходный код не меняется во время синтаксического анализа, но в HTML динамический код (например, элементы скрипта, содержащие вызовы document.write()), может добавлять дополнительные токены, поэтому процесс синтаксического анализа фактически изменяет входные данные.  
+Не имея возможности использовать обычные методы синтаксического анализа, браузер использует пользовательский синтаксический анализатор для анализа HTML. Алгоритм синтаксического анализа подробно описан в спецификации HTML5.  
+Алгоритм состоит из двух этапов: токенизации и построения дерева.  
+Действия по завершении синтаксического анализа  
+Браузер начинает извлекать внешние ресурсы, связанные со страницей (CSS, изображения, файлы JavaScript и т.д.).  
+На этом этапе браузер помечает документ как интерактивный и запускает синтаксический анализ сценариев, которые находятся в "отложенном" режиме: те, которые должны быть выполнены после анализа документа. Состояние документа устанавливается на "завершено" и запускается событие "загрузка".  
+Обратите внимание, что на HTML-странице никогда не появляется ошибка "Недопустимый синтаксис". Браузеры исправляют любое недопустимое содержимое и продолжают работу.  
 
 CSS interpretation  
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"  
