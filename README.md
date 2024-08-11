@@ -431,12 +431,25 @@ Networking: The networking handles network calls such as HTTP requests, using di
 UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.
 JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.
 Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
+Компонентами браузеров являются:  
+Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.
+Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.
+Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.
+Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.
+Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.
+Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.
+Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
 HTML parsing  
+Синтаксический анализ HTML  
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
 The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
 The output tree (the "parse tree") is a tree of DOM element and attribute nodes. DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript. The root of the tree is the "Document" object. Prior to any manipulation via scripting, the DOM has an almost one-to-one relation to the markup.
 The parsing algorithm HTML cannot be parsed using the regular top-down or bottom-up parsers.  
+Механизм рендеринга начинает получать содержимое запрошенного документа с сетевого уровня. Обычно это выполняется фрагментами по 8 Кб.  
+Основная задача HTML-анализатора - преобразовать HTML-разметку в дерево синтаксического анализа.  
+Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.
+Алгоритм синтаксического анализа HTML не может быть проанализирован с помощью обычных синтаксических анализаторов "сверху вниз" или "снизу вверх".  
 
 The reasons are:  
 The forgiving nature of the language.  
