@@ -83,6 +83,7 @@ The keyboard sends signals on its interrupt request line (IRQ), which is mapped 
 Клавиатура отправляет сигналы в строке запроса на прерывание (IRQ), которая преобразуется контроллером прерываний в вектор прерываний (целое число). Центральный процессор использует таблицу дескрипторов прерываний (IDT) для сопоставления векторов прерываний с функциями (обработчиками прерываний), которые предоставляются ядром. Когда поступает прерывание, центральный процессор индексирует IDT с вектором прерывания и запускает соответствующий обработчик. Таким образом, вступает ядро.  
 
 ## **4.1 (On Windows) A WM_KEYDOWN message is sent to the app**  
+## **(В Windows) В приложение отправляется сообщение WM_KEYDOWN** 
 -------------------------------------------------
 
 The HID transport passes the key down event to the KBDHID.sys driver which converts the HID usage into a scancode. In this case, the scan code is VK_RETURN (0x0D). The KBDHID.sys driver interfaces with the KBDCLASS.sys (keyboard class driver). This driver is responsible for handling all keyboard and keypad input in a secure manner. It then calls into Win32K.sys (after potentially passing the message through 3rd party keyboard filters that are installed). This all happens in kernel mode.
@@ -93,7 +94,6 @@ The Windows SendMessage API is a straightforward function that adds the message 
 
 The window (hWnd) that is active is actually an edit control and the WindowProc in this case has a message handler for WM_KEYDOWN messages. This code looks within the 3rd parameter that was passed to SendMessage (wParam) and, because it is VK_RETURN knows the user has hit the ENTER key.
 
-(В Windows) В приложение отправляется сообщение WM_KEYDOWN
 Транспорт HID передает событие нажатия клавиши драйверу KBDHID.sys, который преобразует использование HID в скан-код. В данном случае скан-кодом является VK_RETURN (0x0D). Драйвер KBDHID.sys взаимодействует с KBDCLASS.sys (драйвер класса клавиатуры). Этот драйвер отвечает за безопасную обработку всех данных, вводимых с клавиатуры. Затем он обращается к Win32K.sys (возможно, после прохождения сообщения через установленные фильтры клавиатуры сторонних производителей). Все это происходит в режиме ядра.
 Win32K.sys определяет, какое окно является активным, с помощью API GetForegroundWindow(). Этот API предоставляет дескриптор окна для адресной строки браузера. Затем основной "поток сообщений" Windows вызывает SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam - это битовая маска, которая указывает дополнительную информацию о нажатии клавиши: количество повторений (в данном случае 0), фактический код сканирования (может зависеть от производителя, но, как правило, не относится к VK_RETURN), были ли также нажаты дополнительные клавиши (например, alt, shift, ctrl) (они не были нажаты), и какое-то другое государство.
 Windows SendMessage API - это простая функция, которая добавляет сообщение в очередь для конкретного дескриптора окна (hWnd). Позже вызывается основная функция обработки сообщений (называемая WindowProc), назначенная hWnd, для обработки каждого сообщения в очереди.
