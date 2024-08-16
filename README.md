@@ -84,34 +84,32 @@ The keyboard sends signals on its interrupt request line (IRQ), which is mapped 
 
 ## **4.1 (On Windows) A WM_KEYDOWN message is sent to the app**  
 ## **(В Windows) В приложение отправляется сообщение WM_KEYDOWN** 
--------------------------------------------------
 
-The HID transport passes the key down event to the KBDHID.sys driver which converts the HID usage into a scancode. In this case, the scan code is VK_RETURN (0x0D). The KBDHID.sys driver interfaces with the KBDCLASS.sys (keyboard class driver). This driver is responsible for handling all keyboard and keypad input in a secure manner. It then calls into Win32K.sys (after potentially passing the message through 3rd party keyboard filters that are installed). This all happens in kernel mode.
+The HID transport passes the key down event to the KBDHID.sys driver which converts the HID usage into a scancode. In this case, the scan code is VK_RETURN (0x0D). The KBDHID.sys driver interfaces with the KBDCLASS.sys (keyboard class driver). This driver is responsible for handling all keyboard and keypad input in a secure manner. It then calls into Win32K.sys (after potentially passing the message through 3rd party keyboard filters that are installed). This all happens in kernel mode.  
+Транспорт HID передает событие нажатия клавиши драйверу KBDHID.sys, который преобразует использование HID в скан-код. В данном случае скан-кодом является VK_RETURN (0x0D). Драйвер KBDHID.sys взаимодействует с KBDCLASS.sys (драйвер класса клавиатуры). Этот драйвер отвечает за безопасную обработку всех данных, вводимых с клавиатуры. Затем он обращается к Win32K.sys (возможно, после прохождения сообщения через установленные фильтры клавиатуры сторонних производителей). Все это происходит в режиме ядра.  
 
-Win32K.sys figures out what window is the active window through the GetForegroundWindow() API. This API provides the window handle of the browser's address box. The main Windows "message pump" then calls SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam is a bitmask that indicates further information about the keypress: repeat count (0 in this case), the actual scan code (can be OEM dependent, but generally wouldn't be for VK_RETURN), whether extended keys (e.g. alt, shift, ctrl) were also pressed (they weren't), and some other state.
+Win32K.sys figures out what window is the active window through the GetForegroundWindow() API. This API provides the window handle of the browser's address box. The main Windows "message pump" then calls SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam is a bitmask that indicates further information about the keypress: repeat count (0 in this case), the actual scan code (can be OEM dependent, but generally wouldn't be for VK_RETURN), whether extended keys (e.g. alt, shift, ctrl) were also pressed (they weren't), and some other state.  
+Win32K.sys определяет, какое окно является активным, с помощью API GetForegroundWindow(). Этот API предоставляет дескриптор окна для адресной строки браузера. Затем основной "поток сообщений" Windows вызывает SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam - это битовая маска, которая указывает дополнительную информацию о нажатии клавиши: количество повторений (в данном случае 0), фактический код сканирования (может зависеть от производителя, но, как правило, не относится к VK_RETURN), были ли также нажаты дополнительные клавиши (например, alt, shift, ctrl) (они не были нажаты), и какое-то другое состояние.  
 
-The Windows SendMessage API is a straightforward function that adds the message to a queue for the particular window handle (hWnd). Later, the main message processing function (called a WindowProc) assigned to the hWnd is called in order to process each message in the queue.
+The Windows SendMessage API is a straightforward function that adds the message to a queue for the particular window handle (hWnd). Later, the main message processing function (called a WindowProc) assigned to the hWnd is called in order to process each message in the queue.  
+Windows SendMessage API - это простая функция, которая добавляет сообщение в очередь для конкретного дескриптора окна (hWnd). Позже вызывается основная функция обработки сообщений (называемая WindowProc), назначенная hWnd, для обработки каждого сообщения в очереди.  
 
 The window (hWnd) that is active is actually an edit control and the WindowProc in this case has a message handler for WM_KEYDOWN messages. This code looks within the 3rd parameter that was passed to SendMessage (wParam) and, because it is VK_RETURN knows the user has hit the ENTER key.
+Активное окно (hWnd) на самом деле является элементом управления редактированием, и WindowProc в этом случае имеет обработчик сообщений для сообщений WM_KEYDOWN. Этот код просматривается в пределах 3-го параметра, который был передан в SendMessage (wParam), и, поскольку именно VK_RETURN знает, что пользователь нажал клавишу ENTER.  
 
-Транспорт HID передает событие нажатия клавиши драйверу KBDHID.sys, который преобразует использование HID в скан-код. В данном случае скан-кодом является VK_RETURN (0x0D). Драйвер KBDHID.sys взаимодействует с KBDCLASS.sys (драйвер класса клавиатуры). Этот драйвер отвечает за безопасную обработку всех данных, вводимых с клавиатуры. Затем он обращается к Win32K.sys (возможно, после прохождения сообщения через установленные фильтры клавиатуры сторонних производителей). Все это происходит в режиме ядра.
-Win32K.sys определяет, какое окно является активным, с помощью API GetForegroundWindow(). Этот API предоставляет дескриптор окна для адресной строки браузера. Затем основной "поток сообщений" Windows вызывает SendMessage(hWnd, WM_KEYDOWN, VK_RETURN, lParam). lParam - это битовая маска, которая указывает дополнительную информацию о нажатии клавиши: количество повторений (в данном случае 0), фактический код сканирования (может зависеть от производителя, но, как правило, не относится к VK_RETURN), были ли также нажаты дополнительные клавиши (например, alt, shift, ctrl) (они не были нажаты), и какое-то другое государство.
-Windows SendMessage API - это простая функция, которая добавляет сообщение в очередь для конкретного дескриптора окна (hWnd). Позже вызывается основная функция обработки сообщений (называемая WindowProc), назначенная hWnd, для обработки каждого сообщения в очереди.
-Активное окно (hWnd) на самом деле является элементом управления редактированием, и WindowProc в этом случае имеет обработчик сообщений для сообщений WM_KEYDOWN. Этот код просматривается в пределах 3-го параметра, который был передан в SendMessage (wParam), и, поскольку это VK_RETURN, знает, что пользователь нажал клавишу ENTER.
-
-(On OS X) A KeyDown NSEvent is sent to the app
+(On OS X) A KeyDown NSEvent is sent to the app  
+(В OS X) В приложение отправляется сообщение о нажатии клавиши NSEvent  
 The interrupt signal triggers an interrupt event in the I/O Kit kext keyboard driver. The driver translates the signal into a key code which is passed to the OS X WindowServer process. Resultantly, the WindowServer dispatches an event to any appropriate (e.g. active or listening) applications through their Mach port where it is placed into an event queue. Events can then be read from this queue by threads with sufficient privileges calling the mach_ipc_dispatch function. This most commonly occurs through, and is handled by, an NSApplication main event loop, via an NSEvent of NSEventType KeyDown.
-(В OS X) В приложение отправляется сообщение о нажатии клавиши NSEvent
-Сигнал прерывания запускает событие прерывания в драйвере клавиатуры kext Kit ввода-вывода. Драйвер преобразует сигнал в код клавиши, который передается серверному процессу OS X WindowsServer. В результате оконный сервер отправляет событие любым подходящим приложениям (например, активным или прослушивающим) через их Mach-порт, где оно помещается в очередь событий. Затем события могут быть считаны из этой очереди потоками с достаточными привилегиями, вызывающими функцию mach_ipc_dispatch. Чаще всего это происходит через основной цикл обработки событий NSApplication и обрабатывается им с помощью NSEvent из NSEventType KeyDown.
+Сигнал прерывания запускает событие прерывания в драйвере клавиатуры kext Kit ввода-вывода. Драйвер преобразует сигнал в код клавиши, который передается серверному процессу OS X WindowServer. В результате оконный сервер отправляет событие любым подходящим приложениям (например, активным или прослушивающим) через их Mach-порт, где оно помещается в очередь событий. Затем события могут быть считаны из этой очереди потоками с достаточными привилегиями, вызывающими функцию mach_ipc_dispatch. Чаще всего это происходит через основной цикл обработки событий NSApplication и обрабатывается им с помощью NSEvent из NSEventType KeyDown.  
 
-(On GNU/Linux) the Xorg server listens for keycodes
+(On GNU/Linux) the Xorg server listens for keycodes  
+(В GNU/Linux) сервер Xorg прослушивает коды клавиш  
 When a graphical X server is used, X will use the generic event driver evdev to acquire the keypress. A re-mapping of keycodes to scancodes is made with X server specific keymaps and rules. When the scancode mapping of the key pressed is complete, the X server sends the character to the window manager (DWM, metacity, i3, etc), so the window manager in turn sends the character to the focused window. The graphical API of the window that receives the character prints the appropriate font symbol in the appropriate focused field.
-((В GNU/Linux) сервер Xorg прослушивает коды клавиш
-Когда используется графический сервер X, X будет использовать универсальный драйвер событий evdev для получения нажатия клавиши. Повторное сопоставление кодов клавиш со сканкодами выполняется с использованием специальных сопоставлений клавиш и правил для X-сервера. Когда отображение сканкода нажатой клавиши завершено, X-сервер отправляет символ оконному менеджеру (DWM, metacity, i3 и т.д.), а оконный менеджер, в свою очередь, отправляет символ в сфокусированное окно. Графический API окна, принимающего символ, выводит соответствующий символ шрифта в соответствующем выделенном поле.
+Когда используется графический сервер X, X будет использовать универсальный драйвер событий evdev для получения нажатия клавиши. Повторное сопоставление кодов клавиш со сканкодами выполняется с использованием специальных сопоставлений клавиш и правил для X-сервера. Когда отображение сканкода нажатой клавиши завершено, X-сервер отправляет символ оконному менеджеру (DWM, metacity, i3 и т.д.), а оконный менеджер, в свою очередь, отправляет символ в сфокусированное окно. Графический API окна, принимающего символ, выводит соответствующий символ шрифта в соответствующем выделенном поле.  
 
-Parse URL
+Parse URL  
+Разобрать URL-адрес  
 The browser now has the following information contained in the URL (Uniform Resource Locator):
-Проанализировать URL-адрес
 Теперь браузер имеет следующую информацию, содержащуюся в URL-адресе (единый указатель ресурсов):
 
 Protocol "http"  
@@ -119,13 +117,14 @@ Use 'Hyper Text Transfer Protocol'
 Resource "/"  
 Retrieve main (index) page  
 Is it a URL or a search term?  
-When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
 Протокол "http"
 Используйте "Протокол передачи гипертекста"
 Ресурс "/"
 Извлеките главную (индексную) страницу
-Это URL-адрес или поисковый запрос?
-Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.
+Это URL-адрес или поисковый запрос?  
+When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
+Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.  
+--------------------------------------------------
 
 Convert non-ASCII Unicode characters in the hostname  
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
