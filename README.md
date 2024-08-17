@@ -124,55 +124,50 @@ Is it a URL or a search term?
 Это URL-адрес или поисковый запрос?  
 When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
 Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.  
---------------------------------------------------
 
 Convert non-ASCII Unicode characters in the hostname  
+Преобразуйте символы Юникода, отличные от ASCII, в имя хоста  
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
-Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.
-Преобразуйте символы Юникода, отличные от ASCII, в имя хоста
+Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.  
 Браузер проверяет имя хоста на наличие символов, отличных от a-z, A-Z, 0-9, -, или ..
-Поскольку имя хоста google.com, его там не будет, но если бы оно было, браузер применил бы кодировку Punycode к части URL, содержащей имя хоста.
+Поскольку имя хоста google.com, его там не будет, но если бы оно было, браузер применил бы кодировку Punycode к части URL, содержащей имя хоста.  
 
 Check HSTS list  
+Проверка списка HSTS (HTTP Strict Transport Security)  
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
-If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)
-Проверьте список HSTS  
+If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)  
 Браузер проверяет свой список "предварительно загруженных HSTS (HTTP Strict Transport Security)". Это список веб-сайтов, которые запросили доступ только по протоколу HTTPS.
-Если веб-сайт есть в списке, браузер отправляет запрос по протоколу HTTPS, а не по протоколу HTTP. В противном случае первоначальный запрос отправляется по протоколу HTTP. (Обратите внимание, что веб-сайт все равно может использовать политику HSTS, не находясь в списке HSTS. При первом HTTP-запросе пользователя к веб-сайту будет получен ответ с просьбой отправлять только HTTPS-запросы. Однако этот единственный HTTP-запрос потенциально может сделать пользователя уязвимым для атаки с понижением версии, поэтому в современных веб-браузерах включен список HSTS.)
+Если веб-сайт есть в списке, браузер отправляет запрос по протоколу HTTPS, а не по протоколу HTTP. В противном случае первоначальный запрос отправляется по протоколу HTTP. (Обратите внимание, что веб-сайт все равно может использовать политику HSTS, не находясь в списке HSTS. При первом HTTP-запросе пользователя к веб-сайту будет получен ответ с просьбой отправлять только HTTPS-запросы. Однако этот единственный HTTP-запрос потенциально может сделать пользователя уязвимым для атаки с понижением версии, поэтому в современных веб-браузерах включен список HSTS.)  
 
 DNS lookup  
+Поиск по DNS  
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
 If gethostbyname does not have it cached nor can find it in the hosts file then it makes a request to the DNS server configured in the network stack. This is typically the local router or the ISP's caching DNS server.
-Поиск по DNS
 Браузер проверяет, есть ли домен в его кэше. (чтобы просмотреть кэш DNS в Chrome, перейдите по ссылке chrome://net-internals/#dns).
 Если он не найден, браузер вызывает библиотечную функцию gethostbyname (зависит от операционной системы) для выполнения поиска.
 gethostbyname проверяет, можно ли разрешить имя хоста по ссылке в локальном файле hosts (расположение которого зависит от операционной системы), прежде чем пытаться разрешить имя хоста через DNS.
-Если gethostbyname не сохранен в кэше и не может быть найден в файле hosts, он отправляет запрос на DNS-сервер, настроенный в сетевом стеке. Обычно это локальный маршрутизатор или кэширующий DNS-сервер интернет-провайдера.
+Если gethostbyname не сохранен в кэше и не может быть найден в файле hosts, он отправляет запрос на DNS-сервер, настроенный в сетевом стеке. Обычно это локальный маршрутизатор или кэширующий DNS-сервер интернет-провайдера.  
 
-If the DNS server is on the same subnet the network library follows the ARP process below for the DNS server.
-If the DNS server is on a different subnet, the network library follows the ARP process below for the default gateway IP.
-Если DNS-сервер находится в той же подсети, сетевая библиотека выполняет описанный ниже процесс ARP для DNS-сервера.
+If the DNS server is on the same subnet the network library follows the ARP process below for the DNS server.  
+If the DNS server is on a different subnet, the network library follows the ARP process below for the default gateway IP.  
+Если DNS-сервер находится в той же подсети, сетевая библиотека выполняет описанный ниже процесс ARP для DNS-сервера.  
 Если DNS-сервер находится в другой подсети, сетевая библиотека выполняет описанный ниже процесс ARP для IP-адреса шлюза по умолчанию.  
 
 ARP process  
+Процесс ARP (протокол разрешения адресов)  
 In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.
-Процесс ARP
 Для отправки широковещательной передачи по протоколу ARP (протокол разрешения адресов) библиотеке сетевого стека необходим целевой IP-адрес для поиска. Ей также необходимо знать MAC-адрес интерфейса, который она будет использовать для отправки широковещательной передачи по протоколу ARP.  
 
-The ARP cache is first checked for an ARP entry for our target IP. If it is in the cache, the library function returns the result: Target IP = MAC.
-  
-If the entry is not in the ARP cache:
-  
-The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway.
-The MAC address of the selected network interface is looked up.
+The ARP cache is first checked for an ARP entry for our target IP. If it is in the cache, the library function returns the result: Target IP = MAC.  
+Сначала кэш ARP проверяется на наличие записи ARP для нашего целевого IP. Если она есть в кэше, библиотечная функция возвращает результат: Целевой IP = MAC.  
+If the entry is not in the ARP cache:  
+Если записи нет в кэше ARP:  
+
+The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway. The MAC address of the selected network interface is looked up.
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
-Сначала кэш ARP проверяется на наличие записи ARP для нашего целевого IP. Если она есть в кэше, библиотечная функция возвращает результат: Целевой IP = MAC.
-Если записи нет в кэше ARP:
-Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию.
-Выполняется поиск MAC-адреса выбранного сетевого интерфейса.
-Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):
+Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию. Выполняется поиск MAC-адреса выбранного сетевого интерфейса. Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):  
 
 ARP Request:  
 Sender MAC: interface:mac:address:here  
@@ -181,7 +176,7 @@ Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)
 Target IP: target.ip.goes.here  
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
-
+-------------------------------------------------
 Directly connected:  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below)
