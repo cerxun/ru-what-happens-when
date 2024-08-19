@@ -176,26 +176,23 @@ Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)
 Target IP: target.ip.goes.here  
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
--------------------------------------------------
-Directly connected:  
 
-If the computer is directly connected to the router the router response with an ARP Reply (see below)
-Hub:  
+Directly connected:  
 Прямое подключение:  
 
-Если компьютер напрямую подключен к маршрутизатору, маршрутизатор ответит ARP-ответом (см. ниже).
-Хаб:  
+If the computer is directly connected to the router the router response with an ARP Reply (see below) Hub:  
+Если компьютер напрямую подключен к маршрутизатору, маршрутизатор ответит ARP-ответом (см. ниже) Хаб:  
 
 If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).
 Switch:  
 Если компьютер подключен к концентратору, концентратор будет транслировать запрос ARP со всех других портов. Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).
 Переключатель:  
 
-If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.
-If the switch has an entry in the MAC/CAM table it will send the ARP request to the port that has the MAC address we are looking for.
-If the router is on the same "wire", it will respond with an ARP Reply (see below)
-Если компьютер подключен к коммутатору, коммутатор проверит свою локальную таблицу CAM/MAC, чтобы узнать, какой порт содержит искомый MAC-адрес. Если у коммутатора нет данных для MAC-адреса, он повторно передаст запрос ARP на все остальные порты.
-Если у коммутатора есть запись в таблице MAC/CAM, он отправит запрос ARP на порт, который имеет искомый MAC-адрес.
+If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.  
+If the switch has an entry in the MAC/CAM table it will send the ARP request to the port that has the MAC address we are looking for.  
+If the router is on the same "wire", it will respond with an ARP Reply (see below)  
+Если компьютер подключен к коммутатору, коммутатор проверит свою локальную таблицу CAM/MAC, чтобы узнать, какой порт содержит искомый MAC-адрес. Если у коммутатора нет данных для MAC-адреса, он повторно передаст запрос ARP на все остальные порты.  
+Если у коммутатора есть запись в таблице MAC/CAM, он отправит запрос ARP на порт, который имеет искомый MAC-адрес.  
 Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 
 ARP Reply:  
@@ -212,26 +209,26 @@ IP отправителя: target.ip.goes.здесь
 Целевой IP: interface.ip.goes.здесь  
 Теперь, когда у сетевой библиотеки есть IP-адрес либо нашего DNS-сервера, либо шлюза по умолчанию, она может возобновить процесс tsDNS:  
 
-The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.
-If the response size is too large, TCP will be used instead.
-If the local/ISP DNS server does not have it, then a recursive search is requested and that flows up the list of DNS servers until the SOA is reached, and if found an answer is returned.
-Opening of a socket
+The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.  
+If the response size is too large, TCP will be used instead.  
+If the local/ISP DNS server does not have it, then a recursive search is requested and that flows up the list of DNS servers until the SOA is reached, and if found an answer is returned.  
+Opening of a socket  
 Once the browser receives the IP address of the destination server, it takes that and the given port number from the URL (the HTTP protocol defaults to port 80, and HTTPS to port 443), and makes a call to the system library function named socket and requests a TCP socket stream - AF_INET/AF_INET6 and SOCK_STREAM.  
-DNS-клиент устанавливает сокет на UDP-порт 53 на DNS-сервере, используя исходный порт выше 1023.
-Если размер ответа слишком велик, вместо него будет использоваться протокол TCP.
-Если у локального DNS-сервера/интернет-провайдера его нет, то запрашивается рекурсивный поиск, который перемещается вверх по списку DNS-серверов до тех пор, пока не будет достигнут SOA, и, если он найден, возвращается ответ.
-Открытие сокета
-Как только браузер получает IP-адрес конечного сервера, он берет его и указанный номер порта из URL-адреса (по умолчанию для протокола HTTP используется порт 80, а для HTTPS - порт 443), вызывает функцию системной библиотеки с именем socket и запрашивает поток сокетов TCP - AF_INET/AF_INET6 и SOCK_STREAM.
+DNS-клиент устанавливает сокет на UDP-порт 53 на DNS-сервере, используя исходный порт выше 1023.  
+Если размер ответа слишком велик, вместо него будет использоваться протокол TCP.  
+Если у локального DNS-сервера/интернет-провайдера его нет, то запрашивается рекурсивный поиск, который перемещается вверх по списку DNS-серверов до тех пор, пока не будет достигнут SOA, и, если он найден, возвращается ответ.  
+Открытие сокета  
+Как только браузер получает IP-адрес конечного сервера, он берет его и указанный номер порта из URL-адреса (по умолчанию для протокола HTTP используется порт 80, а для HTTPS - порт 443), вызывает функцию системной библиотеки с именем socket и запрашивает поток сокетов TCP - AF_INET/AF_INET6 и SOCK_STREAM.  
 
-This request is first passed to the Transport Layer where a TCP segment is crafted. The destination port is added to the header, and a source port is chosen from within the kernel's dynamic port range (ip_local_port_range in Linux).
+This request is first passed to the Transport Layer where a TCP segment is crafted. The destination port is added to the header, and a source port is chosen from within the kernel's dynamic port range (ip_local_port_range in Linux).  
 This segment is sent to the Network Layer, which wraps an additional IP header. The IP address of the destination server as well as that of the current machine is inserted to form a packet.
-The packet next arrives at the Link Layer. A frame header is added that includes the MAC address of the machine's NIC as well as the MAC address of the gateway (local router). As before, if the kernel does not know the MAC address of the gateway, it must broadcast an ARP query to find it.
+The packet next arrives at the Link Layer. A frame header is added that includes the MAC address of the machine's NIC as well as the MAC address of the gateway (local router). As before, if the kernel does not know the MAC address of the gateway, it must broadcast an ARP query to find it.  
 At this point the packet is ready to be transmitted through either:  
-Этот запрос сначала передается на транспортный уровень, где создается сегмент TCP. Порт назначения добавляется в заголовок, а порт источника выбирается из динамического диапазона портов ядра (ip_local_port_range в Linux).
+Этот запрос сначала передается на транспортный уровень, где создается сегмент TCP. Порт назначения добавляется в заголовок, а порт источника выбирается из динамического диапазона портов ядра (ip_local_port_range в Linux).  
 Этот сегмент отправляется на сетевой уровень, который передает дополнительный IP-заголовок. Для формирования пакета вводятся IP-адреса сервера назначения, а также текущего компьютера.
-Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.
-На этом этапе пакет готов к передаче через любой из:
-
+Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.  
+На этом этапе пакет готов к передаче через любой из:  
+----------------------------------
 Ethernet  
 WiFi  
 Cellular data network  
