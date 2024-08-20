@@ -15,30 +15,32 @@ This is all licensed under the terms of the Creative Commons Zero license.
 **Содержание**
 
 1. [The "g" key is pressed - Нажата клавиша "g".](#1-the-g-key-is-pressed)  
-2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](2-the-enter-key-bottoms-out)  
-3. [Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].](#3-interrupt-fires-not-for-usb-keyboards)  
+2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](2-the-enter-key-bottoms-out)
+   2.1 In the case of the USB keyboard - В случае USB-клавиатуры:  
+   2.2 In the case of Virtual Keyboard (as in touch screen devices) - В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):  
+4. [Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].](#3-interrupt-fires-not-for-usb-keyboards)  
   3.1 [(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.](#31-on-windows-a-wm_keydown-message-is-sent-to-the-app)  
   3.2 (On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.  
   3.3 (On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.  
-4. Parse URL - Парсинг URL.  
-5. Is it a URL or a search term? - Это URL или поисковый запрос?  
-6. Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.  
-7. Check HSTS list - Проверка списка HSTS.  
-8. DNS lookup - Поиск DNS.  
-9. ARP process - Процесс ARP.  
-10. Opening of a socket - Открытие сокета.  
-11. TLS handshake - Установление связи TLS.  
-12. If a packet is dropped - Если пакет отброшен?!  
-13. HTTP protocol - Протокол HTTP.  
-14. HTTP Server Request Handle - Обработка запроса HTTP сервера.  
-15. Behind the scenes of the Browser - За кулисами браузера.  
-16. Browser - Браузер.  
-17. HTML parsing - Парсинг HTML.  
-18. CSS interpretation - Интерпретация CSS.  
-19. Page Rendering - Рендеринг страницы.  
-20. GPU Rendering - Рендеринг процессора.  
-21. Window Server - Сервер Windows. 
-22. Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.  
+5. Parse URL - Парсинг URL.  
+6. Is it a URL or a search term? - Это URL или поисковый запрос?  
+7. Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.  
+8. Check HSTS list - Проверка списка HSTS.  
+9. DNS lookup - Поиск DNS.  
+10. ARP process - Процесс ARP.  
+11. Opening of a socket - Открытие сокета.  
+12. TLS handshake - Установление связи TLS.  
+13. If a packet is dropped - Если пакет отброшен?!  
+14. HTTP protocol - Протокол HTTP.  
+15. HTTP Server Request Handle - Обработка запроса HTTP сервера.  
+16. Behind the scenes of the Browser - За кулисами браузера.  
+17. Browser - Браузер.  
+18. HTML parsing - Парсинг HTML.  
+19. CSS interpretation - Интерпретация CSS.  
+20. Page Rendering - Рендеринг страницы.  
+21. GPU Rendering - Рендеринг процессора.  
+22. Window Server - Сервер Windows. 
+23. Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.  
 
 The following sections explain the physical keyboard actions and the OS interrupts.  
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы.  
@@ -55,8 +57,8 @@ When you press the key "g" the browser receives the event and the auto-complete 
 To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
 Чтобы выбрать нулевую точку, давайте нажмем клавишу Enter на клавиатуре в нижней части диапазона клавиш. В этот момент электрическая цепь, соответствующая клавише *Enter*, замыкается (либо напрямую, либо емкостно). Это позволяет небольшому количеству тока поступать в логическую схему клавиатуры, которая сканирует состояние каждого переключателя клавиш, устраняет электрические помехи, возникающие при быстром прерывистом замыкании переключателя, и преобразует их в целое число с кодом клавиши, в данном случае 13. Затем контроллер клавиатуры кодирует код клавиши для передачи на компьютер. В настоящее время это почти повсеместно осуществляется через универсальную последовательную шину (USB) или Bluetooth-соединение, но исторически это происходило через PS/2 или ADB-соединения.
 
-### **In the case of the USB keyboard:**  
-### **В случае USB-клавиатуры:**  
+### 2.1 **In the case of the USB keyboard:**  
+### 2.1 **В случае USB-клавиатуры:**  
 
 The USB circuitry of the keyboard is powered by the 5V supply provided over pin 1 from the computer's USB host controller.
 The keycode generated is stored by internal keyboard circuitry memory in a register called "endpoint".
@@ -66,8 +68,8 @@ Those packets are sent by a differential electrical signal over D+ and D- pins (
 This serial signal is then decoded at the computer's host USB controller, and interpreted by the computer's Human Interface Device (HID) universal keyboard device driver. The value of the key is then passed into the operating system's hardware abstraction layer.  
 USB-схема клавиатуры питается от источника питания напряжением 5 В, подключенного к контакту 1 USB-контроллера компьютера. Сгенерированный код ключа сохраняется во внутренней памяти клавиатуры в регистре, называемом "конечная точка". Главный USB-контроллер опрашивает эту "конечную точку" каждые ~10 мс (минимальное значение, объявленное клавиатурой), поэтому он получает сохраненное на нем значение кода ключа. Это значение передается в USB SIE (модуль последовательного интерфейса) для преобразования в один или несколько USB-пакетов, которые соответствуют низкоуровневому USB-протоколу. Эти пакеты передаются с помощью дифференциального электрического сигнала по контактам D+ и D-link (средние 2) с максимальной скоростью 1,5 Мб/с, поскольку устройство HID (устройство для взаимодействия с человеком) всегда считается "низкоскоростным устройством" (соответствует стандарту USB 2.0). Этот последовательный сигнал затем декодируется на главном USB-контроллере компьютера и интерпретируется драйвером универсального клавиатурного устройства HID компьютера. Значение ключа затем передается на уровень аппаратной абстракции операционной системы.  
 
-### **In the case of Virtual Keyboard (as in touch screen devices):**  
-### **В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):**  
+### 2.2 **In the case of Virtual Keyboard (as in touch screen devices):**  
+### 2.2 **В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):**  
 
 When the user puts their finger on a modern capacitive touch screen, a tiny amount of current gets transferred to the finger. This completes the circuit through the electrostatic field of the conductive layer and creates a voltage drop at that point on the screen. The screen controller then raises an interrupt reporting the coordinate of the keypress.
 Then the mobile OS notifies the currently focused application of a press event in one of its GUI elements (which now is the virtual keyboard application buttons).
