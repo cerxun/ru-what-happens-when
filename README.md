@@ -425,12 +425,17 @@ The server parses the file according to the handler. If Google is running on PHP
 Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
 Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
-## 16. Parsing - HTML, CSS, JS  
-## 16. Синтаксический анализ - HTML, CSS, JS  
-
-Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
-The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
+Parsing - HTML, CSS, JS  
+Синтаксический анализ - HTML, CSS, JS  
+Parsing - HTML, CSS, JS  
+Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree  
 Рендеринг - Построение дерева DOM → Дерево рендеринга → Макет дерева рендеринга → Отображение дерева рендеринга в браузере  
+
+## 16. Browser  
+## 16. Браузер  
+
+The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
+
 Функциональность браузера заключается в представлении выбранного вами веб-ресурса путем запроса его с сервера и отображения в окне браузера. Ресурс обычно представляет собой HTML-документ, но также может быть в формате PDF, с изображением или каким-либо другим типом содержимого. Местоположение ресурса определяется пользователем с помощью URI (Uniform Resource Identifier).  
 
 The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.  
@@ -449,10 +454,12 @@ Bookmarking options
 
 Refresh and stop buttons for refreshing or stopping the loading of current documents  
 Home button that takes you to your home page  
-Browser High-Level Structure  
+
+**Browser High-Level Structure**  
+**Высокоуровневая структура браузера**  
+
 Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
 Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
-Высокоуровневая структура браузера  
 
 The components of the browsers are:  
 Компонентами браузеров являются:  
@@ -486,8 +493,10 @@ The output tree (the "parse tree") is a tree of DOM element and attribute nodes.
 Основная задача HTML-анализатора - преобразовать HTML-разметку в дерево синтаксического анализа.  
 Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.  
 
-The parsing algorithm HTML cannot be parsed using the regular top-down or bottom-up parsers.  
-Алгоритм синтаксического анализа HTML не может быть проанализирован с помощью обычных синтаксических анализаторов "сверху вниз" или "снизу вверх".  
+The parsing algorithm  
+HTML cannot be parsed using the regular top-down or bottom-up parsers.  
+Алгоритм синтаксического анализа  
+HTML не может быть проанализирован с помощью обычных синтаксических анализаторов "сверху вниз" или "снизу вверх".  
 
 The reasons are:  
 Причины в том, что:  
@@ -501,10 +510,11 @@ The fact that browsers have traditional error tolerance to support well known ca
 The parsing process is reentrant. For other languages, the source doesn't change during parsing, but in HTML, dynamic code (such as script elements containing document.write() calls) can add extra tokens, so the parsing process actually modifies the input.  
 Unable to use the regular parsing techniques, the browser utilizes a custom parser for parsing HTML. The parsing algorithm is described in detail by the HTML5 specification.  
 The algorithm consists of two stages: tokenization and tree construction.  
-Actions when the parsing is finished   
 Процесс синтаксического анализа является повторным. Для других языков исходный код не меняется во время синтаксического анализа, но в HTML динамический код (например, элементы скрипта, содержащие вызовы document.write()), может добавлять дополнительные токены, поэтому процесс синтаксического анализа фактически изменяет входные данные.  
 Не имея возможности использовать обычные методы синтаксического анализа, браузер использует пользовательский синтаксический анализатор для анализа HTML. Алгоритм синтаксического анализа подробно описан в спецификации HTML5.  
 Алгоритм состоит из двух этапов: токенизации и построения дерева.  
+
+Actions when the parsing is finished   
 Действия по завершении синтаксического анализа  
 
 The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).  
@@ -562,12 +572,11 @@ When using GPU for graphical rendering computations the graphical software layer
 В процессе рендеринга графические вычислительные уровни также могут использовать CPU общего назначения или графический процессор GPU.  
 При использовании графического процессора для вычислений графического рендеринга уровни графического программного обеспечения разделяют задачу на несколько частей, что позволяет использовать преимущества массового параллелизма графического процессора для вычислений с плавающей запятой, необходимых для процесса рендеринга.  
   
-## 21. Window Server 
+## 21. Window Server  
 ## 21. Оконный сервер  
-Post-rendering and user-induced execution  
+
+## 22.Post-rendering and user-induced execution  
+## 22.Последующий рендеринг и выполнение под управлением пользователя  
+
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
-
-Последующий рендеринг и выполнение под управлением пользователя  
 После завершения рендеринга браузер выполняет код JavaScript в результате некоторого механизма синхронизации (например, анимации Google Doodle) или взаимодействия с пользователем (ввод запроса в поле поиска и получение предложений). Плагины, такие как Flash или Java, также могут запускаться, хотя в данный момент их нет на главной странице Google. Скрипты могут вызывать выполнение дополнительных сетевых запросов, а также изменять страницу или ее макет, вызывая повторный цикл рендеринга и перерисовки страницы.  
-
-*'END of this article'*
