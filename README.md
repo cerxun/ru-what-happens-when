@@ -27,7 +27,10 @@ This is all licensed under the terms of the Creative Commons Zero license.
 6. [Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.](#6-преобразуйте-символы-юникода-отличные-от-ascii-в-имя-хоста)  
 7. [Check HSTS list - Проверка списка HSTS.](#7-проверка-списка-hsts-http-strict-transport-security)  
 8. [DNS lookup - Поиск DNS.](#8-поиск-по-dns)  
-9. [ARP process - Процесс ARP.](#9-процесс-arp-протокол-разрешения-адресов)  
+9. [ARP process - Процесс ARP.](#9-процесс-arp-протокол-разрешения-адресов)
+   9.1 [Запрос ARP](#91-запрос-arp)
+   9.2 [Прямое подключение](92-прямое-подключение)
+   9.3 [Переключатель](#93-переключатель)
 10. [Opening of a socket - Открытие сокета.](#10-открытие-сокета)  
 11. [TLS handshake - Установление связи TLS.]()  
 12. [If a packet is dropped - Если пакет отброшен?!]()  
@@ -178,7 +181,8 @@ The route table is looked up, to see if the Target IP address is on any of the s
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
 Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию. Выполняется поиск MAC-адреса выбранного сетевого интерфейса. Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):  
 
-### 9.1 **ARP Request:**    
+### 9.1 **ARP Request:**   
+### 9.1 **Запрос ARP:**   
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
