@@ -32,10 +32,10 @@ This is all licensed under the terms of the Creative Commons Zero license.
    9.2 [Прямое подключение](92-прямое-подключение)
    9.3 [Переключатель](#93-переключатель)
 10. [Opening of a socket - Открытие сокета.](#10-открытие-сокета)  
-11. [TLS handshake - Установление связи TLS.]()  
-12. [If a packet is dropped - Если пакет отброшен?!]()  
-13. [HTTP protocol - Протокол HTTP.]()  
-14. [HTTP Server Request Handle - Обработка запроса HTTP сервера.]()  
+11. [TLS handshake - Установление связи TLS.](#11-рукопожатие-по-протоколу-tls)  
+12. [If a packet is dropped - Если пакет отброшен?!](#12-если-пакет-пропущен)  
+13. [HTTP protocol - Протокол HTTP.](#13-протокол-http)  
+14. [HTTP Server Request Handle - Обработка запроса HTTP сервера.](#14-дескриптор-запроса-http-сервера)  
 15. [Behind the scenes of the Browser - За кулисами браузера.]()  
 16. [Browser - Браузер.]()  
 17. [HTML parsing - Парсинг HTML.]()  
@@ -414,18 +414,19 @@ The server verifies that the client is allowed to use this method (by IP, authen
 
 If the server has a rewrite module installed (like mod_rewrite for Apache or URL Rewrite for IIS), it tries to match the request against one of the configured rules. If a matching rule is found, the server uses that rule to rewrite the request.  
 The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).  
-The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.
-Behind the scenes of the Browser  
+The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.  
 Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.
 Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).
-Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.
-За кулисами браузера  
+Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.  
+
+## 15. Behind the scenes of the Browser  
+## 15. За кулисами браузера  
 
 Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
 Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
-## 15. Parsing - HTML, CSS, JS  
-## 15. Синтаксический анализ - HTML, CSS, JS  
+## 16. Parsing - HTML, CSS, JS  
+## 16. Синтаксический анализ - HTML, CSS, JS  
 
 Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
@@ -475,8 +476,8 @@ Data storage: The data storage is a persistence layer. The browser may need to s
 Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.  
 Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
-## 16. HTML parsing  
-## 16. Синтаксический анализ HTML  
+## 17. HTML parsing  
+## 17. Синтаксический анализ HTML  
 
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
 The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
@@ -513,8 +514,8 @@ Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any 
 На этом этапе браузер помечает документ как интерактивный и запускает синтаксический анализ сценариев, которые находятся в "отложенном" режиме: те, которые должны быть выполнены после анализа документа. Состояние документа устанавливается на "завершено" и запускается событие "загрузка".  
 Обратите внимание, что на HTML-странице никогда не появляется ошибка "Недопустимый синтаксис". Браузеры исправляют любое недопустимое содержимое и продолжают работу.  
 
-## 17. CSS interpretation  
-## 17. Интерпретация CSS  
+## 18. CSS interpretation  
+## 18. Интерпретация CSS  
 
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"  
 Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.  
@@ -523,8 +524,8 @@ A CSS parser can be top-down or bottom-up when a specific parser generator is us
 Каждый файл CSS преобразуется в объект таблицы стилей, где каждый объект содержит правила CSS с селекторами и объектами, соответствующими грамматике CSS.  
 Синтаксический анализатор CSS может работать как сверху вниз, так и снизу вверх, когда используется определенный генератор синтаксических анализаторов.  
 
-## 18. Page Rendering  
-## 18. Рендеринг страницы  
+## 19. Page Rendering  
+## 19. Рендеринг страницы  
 
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
@@ -553,16 +554,16 @@ Final layer positions are computed and the composite commands are issued via Dir
 Слои страницы отправляются в процесс компоновки, где они объединяются со слоями для другого видимого контента, такого как браузер chrome, iframes и дополнительные панели.
 Вычисляются окончательные позиции слоев и выполняются команды компоновки с помощью Direct3D/OpenGL. Буферы команд графического процессора загружаются в графический процессор для асинхронного рендеринга, и кадр отправляется на оконный сервер.  
 
-## 19. GPU Rendering  
-## 19. Рендеринг на GPU  
+## 20. GPU Rendering  
+## 20. Рендеринг на GPU  
 
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.  
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.  
 В процессе рендеринга графические вычислительные уровни также могут использовать CPU общего назначения или графический процессор GPU.  
 При использовании графического процессора для вычислений графического рендеринга уровни графического программного обеспечения разделяют задачу на несколько частей, что позволяет использовать преимущества массового параллелизма графического процессора для вычислений с плавающей запятой, необходимых для процесса рендеринга.  
   
-## 20. Window Server 
-## 20. Оконный сервер  
+## 21. Window Server 
+## 21. Оконный сервер  
 Post-rendering and user-induced execution  
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
 
