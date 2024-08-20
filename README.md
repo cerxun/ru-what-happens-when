@@ -97,18 +97,18 @@ Windows SendMessage API - это простая функция, которая �
 The window (hWnd) that is active is actually an edit control and the WindowProc in this case has a message handler for WM_KEYDOWN messages. This code looks within the 3rd parameter that was passed to SendMessage (wParam) and, because it is VK_RETURN knows the user has hit the ENTER key.
 Активное окно (hWnd) на самом деле является элементом управления редактированием, и WindowProc в этом случае имеет обработчик сообщений для сообщений WM_KEYDOWN. Этот код просматривается в пределах 3-го параметра, который был передан в SendMessage (wParam), и, поскольку именно VK_RETURN знает, что пользователь нажал клавишу ENTER.  
 
-(On OS X) A KeyDown NSEvent is sent to the app  
-(В OS X) В приложение отправляется сообщение о нажатии клавиши NSEvent  
+### 4.1. (On OS X) A KeyDown NSEvent is sent to the app  
+### 4.1. (В OS X) В приложение отправляется сообщение о нажатии клавиши NSEvent  
 The interrupt signal triggers an interrupt event in the I/O Kit kext keyboard driver. The driver translates the signal into a key code which is passed to the OS X WindowServer process. Resultantly, the WindowServer dispatches an event to any appropriate (e.g. active or listening) applications through their Mach port where it is placed into an event queue. Events can then be read from this queue by threads with sufficient privileges calling the mach_ipc_dispatch function. This most commonly occurs through, and is handled by, an NSApplication main event loop, via an NSEvent of NSEventType KeyDown.
 Сигнал прерывания запускает событие прерывания в драйвере клавиатуры kext Kit ввода-вывода. Драйвер преобразует сигнал в код клавиши, который передается серверному процессу OS X WindowServer. В результате оконный сервер отправляет событие любым подходящим приложениям (например, активным или прослушивающим) через их Mach-порт, где оно помещается в очередь событий. Затем события могут быть считаны из этой очереди потоками с достаточными привилегиями, вызывающими функцию mach_ipc_dispatch. Чаще всего это происходит через основной цикл обработки событий NSApplication и обрабатывается им с помощью NSEvent из NSEventType KeyDown.  
 
-(On GNU/Linux) the Xorg server listens for keycodes  
-(В GNU/Linux) сервер Xorg прослушивает коды клавиш  
+### 4.2. (On GNU/Linux) the Xorg server listens for keycodes  
+### 4.2. (В GNU/Linux) сервер Xorg прослушивает коды клавиш  
 When a graphical X server is used, X will use the generic event driver evdev to acquire the keypress. A re-mapping of keycodes to scancodes is made with X server specific keymaps and rules. When the scancode mapping of the key pressed is complete, the X server sends the character to the window manager (DWM, metacity, i3, etc), so the window manager in turn sends the character to the focused window. The graphical API of the window that receives the character prints the appropriate font symbol in the appropriate focused field.
 Когда используется графический сервер X, X будет использовать универсальный драйвер событий evdev для получения нажатия клавиши. Повторное сопоставление кодов клавиш со сканкодами выполняется с использованием специальных сопоставлений клавиш и правил для X-сервера. Когда отображение сканкода нажатой клавиши завершено, X-сервер отправляет символ оконному менеджеру (DWM, metacity, i3 и т.д.), а оконный менеджер, в свою очередь, отправляет символ в сфокусированное окно. Графический API окна, принимающего символ, выводит соответствующий символ шрифта в соответствующем выделенном поле.  
 
-Parse URL  
-Разобрать URL-адрес  
+## 5. Parse URL  
+## 5. Разобрать URL-адрес  
 The browser now has the following information contained in the URL (Uniform Resource Locator):
 Теперь браузер имеет следующую информацию, содержащуюся в URL-адресе (единый указатель ресурсов):
 
@@ -116,31 +116,35 @@ Protocol "http"
 Use 'Hyper Text Transfer Protocol'  
 Resource "/"  
 Retrieve main (index) page  
-Is it a URL or a search term?  
 Протокол "http"
 Используйте "Протокол передачи гипертекста"
 Ресурс "/"
-Извлеките главную (индексную) страницу
-Это URL-адрес или поисковый запрос?  
+Извлеките главную (индексную) страницу  
+
+## 6. Is it a URL or a search term?  
+## 6. Это URL-адрес или поисковый запрос?  
 When no protocol or valid domain name is given the browser proceeds to feed the text given in the address box to the browser's default web search engine. In many cases the URL has a special piece of text appended to it to tell the search engine that it came from a particular browser's URL bar.
 Если не указан протокол или действительное доменное имя, браузер отправляет текст, указанный в адресной строке, в поисковую систему браузера по умолчанию. Во многих случаях к URL-адресу добавляется специальный фрагмент текста, сообщающий поисковой системе, что он взят из строки URL-адреса конкретного браузера.  
 
-Convert non-ASCII Unicode characters in the hostname  
-Преобразуйте символы Юникода, отличные от ASCII, в имя хоста  
+## 7. Convert non-ASCII Unicode characters in the hostname  
+## 7. Преобразуйте символы Юникода, отличные от ASCII, в имя хоста  
+
 The browser checks the hostname for characters that are not in a-z, A-Z, 0-9, -, or ..
 Since the hostname is google.com there won't be any, but if there were the browser would apply Punycode encoding to the hostname portion of the URL.  
 Браузер проверяет имя хоста на наличие символов, отличных от a-z, A-Z, 0-9, -, или ..
 Поскольку имя хоста google.com, его там не будет, но если бы оно было, браузер применил бы кодировку Punycode к части URL, содержащей имя хоста.  
 
-Check HSTS list  
-Проверка списка HSTS (HTTP Strict Transport Security)  
+## 8. Check HSTS list  
+## 8. Проверка списка HSTS (HTTP Strict Transport Security)  
+
 The browser checks its "preloaded HSTS (HTTP Strict Transport Security)" list. This is a list of websites that have requested to be contacted via HTTPS only.
 If the website is in the list, the browser sends its request via HTTPS instead of HTTP. Otherwise, the initial request is sent via HTTP. (Note that a website can still use the HSTS policy without being in the HSTS list. The first HTTP request to the website by a user will receive a response requesting that the user only send HTTPS requests. However, this single HTTP request could potentially leave the user vulnerable to a downgrade attack, which is why the HSTS list is included in modern web browsers.)  
 Браузер проверяет свой список "предварительно загруженных HSTS (HTTP Strict Transport Security)". Это список веб-сайтов, которые запросили доступ только по протоколу HTTPS.
 Если веб-сайт есть в списке, браузер отправляет запрос по протоколу HTTPS, а не по протоколу HTTP. В противном случае первоначальный запрос отправляется по протоколу HTTP. (Обратите внимание, что веб-сайт все равно может использовать политику HSTS, не находясь в списке HSTS. При первом HTTP-запросе пользователя к веб-сайту будет получен ответ с просьбой отправлять только HTTPS-запросы. Однако этот единственный HTTP-запрос потенциально может сделать пользователя уязвимым для атаки с понижением версии, поэтому в современных веб-браузерах включен список HSTS.)  
 
-DNS lookup  
-Поиск по DNS  
+## 9. DNS lookup  
+## 9. Поиск по DNS  
+
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
@@ -155,8 +159,9 @@ If the DNS server is on a different subnet, the network library follows the ARP 
 Если DNS-сервер находится в той же подсети, сетевая библиотека выполняет описанный ниже процесс ARP для DNS-сервера.  
 Если DNS-сервер находится в другой подсети, сетевая библиотека выполняет описанный ниже процесс ARP для IP-адреса шлюза по умолчанию.  
 
-ARP process  
-Процесс ARP (протокол разрешения адресов)  
+## 10. ARP process  
+## 10. Процесс ARP (протокол разрешения адресов)  
+
 In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.
 Для отправки широковещательной передачи по протоколу ARP (протокол разрешения адресов) библиотеке сетевого стека необходим целевой IP-адрес для поиска. Ей также необходимо знать MAC-адрес интерфейса, который она будет использовать для отправки широковещательной передачи по протоколу ARP.  
 
@@ -169,7 +174,7 @@ The route table is looked up, to see if the Target IP address is on any of the s
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
 Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию. Выполняется поиск MAC-адреса выбранного сетевого интерфейса. Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):  
 
-ARP Request:  
+**ARP Request:**    
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
@@ -177,15 +182,15 @@ Target IP: target.ip.goes.here
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
 
-Directly connected:  
-Прямое подключение:  
+**Directly connected:**   
+**Прямое подключение:**  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below) Hub:  
 Если компьютер напрямую подключен к маршрутизатору, маршрутизатор ответит ARP-ответом (см. ниже) Хаб:  
 
-If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).
+If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).  
+Если компьютер подключен к концентратору, концентратор будет транслировать запрос ARP со всех других портов. Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 Switch:  
-Если компьютер подключен к концентратору, концентратор будет транслировать запрос ARP со всех других портов. Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).
 Переключатель:  
 
 If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.  
@@ -195,8 +200,8 @@ If the router is on the same "wire", it will respond with an ARP Reply (see belo
 Если у коммутатора есть запись в таблице MAC/CAM, он отправит запрос ARP на порт, который имеет искомый MAC-адрес.  
 Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 
-ARP Reply:  
-ARP-ответ:  
+**ARP Reply:**  
+**ARP-ответ:**  
 
 Sender MAC: target:mac:address:here  
 Sender IP: target.ip.goes.here  
@@ -216,9 +221,10 @@ DNS-клиент устанавливает сокет на UDP-порт 53 на
 Если размер ответа слишком велик, вместо него будет использоваться протокол TCP.  
 Если у локального DNS-сервера/интернет-провайдера его нет, то запрашивается рекурсивный поиск, который перемещается вверх по списку DNS-серверов до тех пор, пока не будет достигнут SOA, и, если он найден, возвращается ответ.  
 
-Opening of a socket  
+## 11. Opening of a socket  
+## 11. Открытие сокета  
+
 Once the browser receives the IP address of the destination server, it takes that and the given port number from the URL (the HTTP protocol defaults to port 80, and HTTPS to port 443), and makes a call to the system library function named socket and requests a TCP socket stream - AF_INET/AF_INET6 and SOCK_STREAM.  
-Открытие сокета  
 Как только браузер получает IP-адрес конечного сервера, он берет его и указанный номер порта из URL-адреса (по умолчанию для протокола HTTP используется порт 80, а для HTTPS - порт 443), вызывает функцию системной библиотеки с именем socket и запрашивает поток сокетов TCP - AF_INET/AF_INET6 и SOCK_STREAM.  
 
 This request is first passed to the Transport Layer where a TCP segment is crafted. The destination port is added to the header, and a source port is chosen from within the kernel's dynamic port range (ip_local_port_range in Linux).  
@@ -290,50 +296,54 @@ The closer acknowledges the other side's FIN with an ACK
 Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN
 Closer подтверждает подтверждение FIN другой стороны  
 
-TLS handshake  
-Рукопожатие по протоколу TLS  
-----------------------------------  
+## 12. TLS handshake  
+## 12. Рукопожатие по протоколу TLS  
+
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
 The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
-The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.
-The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.
-The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.
-The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.
-From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.
-If a packet is dropped
-Sometimes, due to network congestion or flaky hardware connections, TLS packets will be dropped before they get to their final destination. The sender then has to decide how to react. The algorithm for this is called TCP congestion control. This varies depending on the sender; the most common algorithms are cubic on newer operating systems and New Reno on almost all others.  
-
+The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.  
+The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.  
+The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.  
+The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.  
+From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.  
 Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.
 Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, выбранными методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
 Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
 Сервер расшифровывает случайные байты с помощью своего закрытого ключа и использует эти байты для создания собственной копии симметричного мастер-ключа.
-Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.
-Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.
+Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.  
+Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.  
+
+## 13. If a packet is dropped  
+## Если пакет пропущен  
+
+Sometimes, due to network congestion or flaky hardware connections, TLS packets will be dropped before they get to their final destination. The sender then has to decide how to react. The algorithm for this is called TCP congestion control. This varies depending on the sender; the most common algorithms are cubic on newer operating systems and New Reno on almost all others.  
 С этого момента сеанс TLS передает данные приложения (HTTP), зашифрованные с помощью согласованного симметричного ключа.
-Если пакет пропущен
 Иногда из-за перегрузки сети или сбоев в подключении оборудования пакеты TLS отбрасываются до того, как они дойдут до конечного пункта назначения. Затем отправитель должен решить, как реагировать. Алгоритм для этого называется TCP congestion control. Это зависит от отправителя; наиболее распространенными алгоритмами являются cubic в новых операционных системах и New Reno почти во всех остальных.  
 
-Client chooses a congestion window based on the maximum segment size (MSS) of the connection.
+Client chooses a congestion window based on the maximum segment size (MSS) of the connection.  
 For each packet acknowledged, the window doubles in size until it reaches the 'slow-start threshold'. In some implementations, this threshold is adaptive.
-After reaching the slow-start threshold, the window increases additively for each packet acknowledged. If a packet is dropped, the window reduces exponentially until another packet is acknowledged.
-HTTP protocol. If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
+After reaching the slow-start threshold, the window increases additively for each packet acknowledged. If a packet is dropped, the window reduces exponentially until another packet is acknowledged.  
 Клиент выбирает время перегрузки на основе максимального размера сегмента (MSS) соединения.
 Для каждого подтвержденного пакета размер окна увеличивается вдвое, пока не достигнет "порога медленного запуска". В некоторых реализациях этот порог является адаптивным.
-После достижения порогового значения медленного запуска окно увеличивается для каждого подтвержденного пакета. Если пакет отбрасывается, окно уменьшается экспоненциально до тех пор, пока не будет подтвержден другой пакет.
+После достижения порогового значения медленного запуска окно увеличивается для каждого подтвержденного пакета. Если пакет отбрасывается, окно уменьшается экспоненциально до тех пор, пока не будет подтвержден другой пакет.  
+
+## 14. HTTP protocol.
 Протокол HTTP  
+
+If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
 Если используемый веб-браузер был создан компанией Google, то вместо отправки HTTP-запроса для получения страницы он отправит запрос на попытку согласовать с сервером "обновление" с HTTP до протокола SPDY.  
 
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
 Если клиент использует протокол HTTP и не поддерживает SPDY, он отправляет запрос на сервер вида:  
 
-#### GET / HTTP/1.1  
-Host: google.com  
-Connection: close  
+**GET / HTTP/1.1**  
+**Host: google.com**  
+**Connection: close**  
 [other headers]  
-ПОЛУЧИТЬ / HTTP/1.1  
-Хост: google.com  
-Соединение: закрыть  
-[другие заголовки]  
+**ПОЛУЧИТЬ / HTTP/1.1**  
+**Хост: google.com**  
+**Соединение: закрыть**  
+**[другие заголовки]**  
 where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)  
 где [другие заголовки] относятся к серии пар ключ-значение, разделенных двоеточием, отформатированных в соответствии со спецификацией HTTP и разделенных отдельными символами новой строки. (Предполагается, что в используемом веб-браузере нет ошибок, нарушающих спецификацию HTTP. Это также предполагает, что веб-браузер использует HTTP/1.1, в противном случае он может не включать заголовок Host в запрос, и версия, указанная в запросе GET, будет либо HTTP/1.0, либо HTTP/0.9.)  
 
@@ -347,12 +357,14 @@ After sending the request and headers, the web browser sends a single blank newl
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
 Сервер выдает код ответа, обозначающий статус запроса, и выдает ответ следующего вида:  
-#### 200 OK
-[response headers]
+
+**200 OK**  
+[response headers]  
+**200 ОК**  
+[заголовки ответа]  
+
 Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
 If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
-#### 200 ОК
-[заголовки ответа]
 За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
 Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
 
