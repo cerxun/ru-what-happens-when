@@ -22,25 +22,25 @@ This is all licensed under the terms of the Creative Commons Zero license.
   3.1 [(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.](#31-в-windows-в-приложение-отправляется-сообщение-wm_keydown)  
   3.2 [(On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.](#32-в-os-x-в-приложение-отправляется-сообщение-о-нажатии-клавиши-nsevent)  
   3.3 [(On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.](#33-в-gnulinux-сервер-xorg-прослушивает-коды-клавиш)  
-5. [Parse URL - Парсинг URL.]()  
-6. [Is it a URL or a search term? - Это URL или поисковый запрос?]()  
-7. [Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.]()  
-8. [Check HSTS list - Проверка списка HSTS.]()  
-9. [DNS lookup - Поиск DNS.]()  
-10. [ARP process - Процесс ARP.]()  
-11. [Opening of a socket - Открытие сокета.]()  
-12. [TLS handshake - Установление связи TLS.]()  
-13. [If a packet is dropped - Если пакет отброшен?!]()  
-14. [HTTP protocol - Протокол HTTP.]()  
-15. [HTTP Server Request Handle - Обработка запроса HTTP сервера.]()  
-16. [Behind the scenes of the Browser - За кулисами браузера.]()  
-17. [Browser - Браузер.]()  
-18. [HTML parsing - Парсинг HTML.]()  
-19. [CSS interpretation - Интерпретация CSS.]()  
-20. [Page Rendering - Рендеринг страницы.]()  
-21. [GPU Rendering - Рендеринг процессора.]()  
-22. [Window Server - Сервер Windows.]()  
-23. [Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.]()  
+4. [Parse URL - Парсинг URL.](#4-разобрать-url-адрес)  
+5. [Is it a URL or a search term? - Это URL или поисковый запрос?](#5-это-url-адрес-или-поисковый-запрос)  
+6. [Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.](#6-преобразуйте-символы-юникода-отличные-от-ascii-в-имя-хоста)  
+7. [Check HSTS list - Проверка списка HSTS.](#7-проверка-списка-hsts-http-strict-transport-security)  
+8. [DNS lookup - Поиск DNS.](#8-поиск-по-dns)  
+9. [ARP process - Процесс ARP.](#9-процесс-arp-протокол-разрешения-адресов)  
+10. [Opening of a socket - Открытие сокета.](#10-открытие-сокета)  
+11. [TLS handshake - Установление связи TLS.]()  
+12. [If a packet is dropped - Если пакет отброшен?!]()  
+13. [HTTP protocol - Протокол HTTP.]()  
+14. [HTTP Server Request Handle - Обработка запроса HTTP сервера.]()  
+15. [Behind the scenes of the Browser - За кулисами браузера.]()  
+16. [Browser - Браузер.]()  
+17. [HTML parsing - Парсинг HTML.]()  
+18. [CSS interpretation - Интерпретация CSS.]()  
+19. [Page Rendering - Рендеринг страницы.]()  
+20. [GPU Rendering - Рендеринг процессора.]()  
+21. [Window Server - Сервер Windows.]()  
+22. [Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.]()  
 
 The following sections explain the physical keyboard actions and the OS interrupts.  
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы.  
@@ -178,7 +178,7 @@ The route table is looked up, to see if the Target IP address is on any of the s
 The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
 Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию. Выполняется поиск MAC-адреса выбранного сетевого интерфейса. Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):  
 
-**ARP Request:**    
+### 9.1 **ARP Request:**    
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
@@ -186,16 +186,17 @@ Target IP: target.ip.goes.here
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
 
-**Directly connected:**   
-**Прямое подключение:**  
+### 9.2 **Directly connected:**   
+### 9.2 **Прямое подключение:**  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below) Hub:  
 Если компьютер напрямую подключен к маршрутизатору, маршрутизатор ответит ARP-ответом (см. ниже) Хаб:  
 
 If the computer is connected to a hub, the hub will broadcast the ARP request out of all other ports. If the router is connected on the same "wire", it will respond with an ARP Reply (see below).  
 Если компьютер подключен к концентратору, концентратор будет транслировать запрос ARP со всех других портов. Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
-Switch:  
-Переключатель:  
+
+### 9.3 **Switch:**  
+### 9.3 **Переключатель:**  
 
 If the computer is connected to a switch, the switch will check its local CAM/MAC table to see which port has the MAC address we are looking for. If the switch has no entry for the MAC address it will rebroadcast the ARP request to all other ports.  
 If the switch has an entry in the MAC/CAM table it will send the ARP request to the port that has the MAC address we are looking for.  
@@ -204,8 +205,8 @@ If the router is on the same "wire", it will respond with an ARP Reply (see belo
 Если у коммутатора есть запись в таблице MAC/CAM, он отправит запрос ARP на порт, который имеет искомый MAC-адрес.  
 Если маршрутизатор подключен к тому же "проводу", он отправит ответ ARP (см. ниже).  
 
-**ARP Reply:**  
-**ARP-ответ:**  
+### 9.4 **ARP Reply:**  
+### 9.4 **ARP-ответ:**  
 
 Sender MAC: target:mac:address:here  
 Sender IP: target.ip.goes.here  
