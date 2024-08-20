@@ -1,14 +1,16 @@
 # What happens when on Russian  
 # Что происходит когда ... (русская версия)  
 
-This repository is an attempt to answer the age-old interview question "What happens when you type google.com into your browser's address box and press enter?"
+This repository is an attempt to answer the age-old interview question "What happens when you type google.com into your browser's address box and press enter?"  
 Этот репозиторий попытка ответить на извечный вопрос на интервью "Что происходит когда вы набираете google.com в строке вашего браузера и нажимаете Ввод?"  
-Except instead of the usual story, we're going to try to answer this question in as much detail as possible. No skipping out on anything.
-Только вместо обычной истории, мы постараемся ответить на этот вопрос как можно подробнее. Ничего не упуская.
-This is a collaborative process, so dig in and try to help out! There are tons of details missing, just waiting for you to add them! So send us a pull request, please!
-Это коллективный процесс, так что вникайте и старайтесь помочь! Не хватает множества деталей, мы просто ждем, когда вы их добавите! Поэтому, пожалуйста, отправьте нам Pull Request!
-This is all licensed under the terms of the Creative Commons Zero license.
-Распространяется на условиях Creative Commons Zero license.
+Except instead of the usual story, we're going to try to answer this question in as much detail as possible. No skipping out on anything.  
+Только вместо обычной истории, мы постараемся ответить на этот вопрос как можно подробнее. Ничего не упуская.  
+
+This is a collaborative process, so dig in and try to help out! There are tons of details missing, just waiting for you to add them! So send us a pull request, please!  
+Это коллективный процесс, так что вникайте и старайтесь помочь! Не хватает множества деталей, мы просто ждем, когда вы их добавите! Поэтому, пожалуйста, отправьте нам Pull Request!  
+
+This is all licensed under the terms of the Creative Commons Zero license.  
+Распространяется на условиях Creative Commons Zero license.  
 
 **Содержание**
 
