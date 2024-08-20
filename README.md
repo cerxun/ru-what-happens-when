@@ -212,34 +212,37 @@ IP отправителя: target.ip.goes.здесь
 The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.  
 If the response size is too large, TCP will be used instead.  
 If the local/ISP DNS server does not have it, then a recursive search is requested and that flows up the list of DNS servers until the SOA is reached, and if found an answer is returned.  
-Opening of a socket  
-Once the browser receives the IP address of the destination server, it takes that and the given port number from the URL (the HTTP protocol defaults to port 80, and HTTPS to port 443), and makes a call to the system library function named socket and requests a TCP socket stream - AF_INET/AF_INET6 and SOCK_STREAM.  
 DNS-клиент устанавливает сокет на UDP-порт 53 на DNS-сервере, используя исходный порт выше 1023.  
 Если размер ответа слишком велик, вместо него будет использоваться протокол TCP.  
 Если у локального DNS-сервера/интернет-провайдера его нет, то запрашивается рекурсивный поиск, который перемещается вверх по списку DNS-серверов до тех пор, пока не будет достигнут SOA, и, если он найден, возвращается ответ.  
+
+Opening of a socket  
+Once the browser receives the IP address of the destination server, it takes that and the given port number from the URL (the HTTP protocol defaults to port 80, and HTTPS to port 443), and makes a call to the system library function named socket and requests a TCP socket stream - AF_INET/AF_INET6 and SOCK_STREAM.  
 Открытие сокета  
 Как только браузер получает IP-адрес конечного сервера, он берет его и указанный номер порта из URL-адреса (по умолчанию для протокола HTTP используется порт 80, а для HTTPS - порт 443), вызывает функцию системной библиотеки с именем socket и запрашивает поток сокетов TCP - AF_INET/AF_INET6 и SOCK_STREAM.  
 
 This request is first passed to the Transport Layer where a TCP segment is crafted. The destination port is added to the header, and a source port is chosen from within the kernel's dynamic port range (ip_local_port_range in Linux).  
-This segment is sent to the Network Layer, which wraps an additional IP header. The IP address of the destination server as well as that of the current machine is inserted to form a packet.
+This segment is sent to the Network Layer, which wraps an additional IP header. The IP address of the destination server as well as that of the current machine is inserted to form a packet.  
+Этот запрос сначала передается на транспортный уровень, где создается сегмент TCP. Порт назначения добавляется в заголовок, а порт источника выбирается из динамического диапазона портов ядра (ip_local_port_range в Linux).  
+Этот сегмент отправляется на сетевой уровень, который передает дополнительный IP-заголовок. Для формирования пакета вводятся IP-адреса сервера назначения, а также текущего компьютера.  
+
 The packet next arrives at the Link Layer. A frame header is added that includes the MAC address of the machine's NIC as well as the MAC address of the gateway (local router). As before, if the kernel does not know the MAC address of the gateway, it must broadcast an ARP query to find it.  
 At this point the packet is ready to be transmitted through either:  
-Этот запрос сначала передается на транспортный уровень, где создается сегмент TCP. Порт назначения добавляется в заголовок, а порт источника выбирается из динамического диапазона портов ядра (ip_local_port_range в Linux).  
-Этот сегмент отправляется на сетевой уровень, который передает дополнительный IP-заголовок. Для формирования пакета вводятся IP-адреса сервера назначения, а также текущего компьютера.
 Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.  
 На этом этапе пакет готов к передаче через любой из:  
-----------------------------------
+
 Ethernet  
-WiFi  
-Cellular data network  
 Локальная сеть  
+WiFi  
 Wi-Fi  
+Cellular data network  
 Сотовая сеть передачи данных  
+
 For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.  
 Для большинства подключений к Интернету для дома или малого бизнеса пакет передается с вашего компьютера, возможно, через локальную сеть, а затем через модем (модулятор/демодулятор), который преобразует цифровые 1 и 0 в аналоговый сигнал, пригодный для передачи по телефонным, кабельным или беспроводным телефонным соединениям. На другом конце соединения находится другой модем, который преобразует аналоговый сигнал обратно в цифровые данные для обработки следующим узлом сети, где адреса "от" и "к" будут проанализированы дополнительно.  
 
 Most larger businesses and some newer residential connections will have fiber or direct Ethernet connections in which case the data remains digital and is passed directly to the next network node for processing.  
-Большинство крупных предприятий и некоторые новые жилые дома имеют оптоволоконные или прямые Ethernet-соединения, и в этом случае данные остаются цифровыми и передаются непосредственно на следующий сетевой узел для обработки.  
+Большинство крупных предприятий и некоторые новые жилые комплексы имеют оптоволоконные или прямые Ethernet-соединения, и в этом случае данные остаются цифровыми и передаются непосредственно на следующий сетевой узел для обработки.  
 
 Eventually, the packet will reach the router managing the local subnet. From there, it will continue to travel to the autonomous system's (AS) border routers, other ASes, and finally to the destination server. Each router along the way extracts the destination address from the IP header and routes it to the appropriate next hop. The time to live (TTL) field in the IP header is decremented by one for each router that passes. The packet will be dropped if the TTL field reaches zero or if the current router has no space in its queue (perhaps due to network congestion).  
 В конце концов, пакет достигнет маршрутизатора, управляющего локальной подсетью. Оттуда он продолжит путь к пограничным маршрутизаторам автономной системы (AS), в других случаях и, наконец, к целевому серверу. Каждый маршрутизатор на своем пути извлекает адрес назначения из IP-заголовка и перенаправляет его на соответствующий следующий переход. Поле time to live (TTL) в IP-заголовке уменьшается на единицу для каждого проходящего маршрутизатора. Пакет будет отброшен, если поле TTL достигнет нуля или если у текущего маршрутизатора не будет свободного места в очереди (возможно, из-за перегрузки сети).  
@@ -247,42 +250,49 @@ Eventually, the packet will reach the router managing the local subnet. From the
 This send and receive happens multiple times following the TCP connection flow:  
 Эта отправка и получение происходят несколько раз в соответствии с потоком TCP-соединений:  
 
-Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN
+Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN  
+Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
 Server receives SYN and if it's in an agreeable mood:
 Server chooses its own initial sequence number
 Server sets SYN to indicate it is choosing its ISN
-Server copies the (client ISN +1) to its ACK field and adds the ACK flag to indicate it is acknowledging receipt of the first packet
-Client acknowledges the connection by sending a packet:
-Increases its own sequence number
-Increases the receiver acknowledgment number
-Sets ACK field
-Data is transferred as follows:
-As one side sends N data bytes, it increases its SEQ by that number
-When the other side acknowledges receipt of that packet (or a string of packets), it sends an ACK packet with the ACK value equal to the last received sequence from the other
-To close the connection:
-The closer sends a FIN packet
-The other sides ACKs the FIN packet and sends its own FIN
-The closer acknowledges the other side's FIN with an ACK   
-
-Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
+Server copies the (client ISN +1) to its ACK field and adds the ACK flag to indicate it is acknowledging receipt of the first packet  
 Сервер получает SYN и, если он в хорошем настроении:
 Сервер сам выбирает свой начальный порядковый номер
 Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN
-Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета
+Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета  
+
+Client acknowledges the connection by sending a packet:
+Increases its own sequence number
+Increases the receiver acknowledgment number
+Sets ACK field  
 Клиент подтверждает соединение, отправляя пакет:
 Увеличивает свой собственный порядковый номер
 Увеличивает номер подтверждения получателя
-Устанавливает поле подтверждения
-Передача данных осуществляется следующим образом:
-Когда одна сторона отправляет N байт данных, она увеличивает свой SEQ на это число
-Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны
-Чтобы закрыть соединение:
-Closer отправляет пакет FIN
+Устанавливает поле подтверждения  
+
+Data is transferred as follows:  
+Передача данных осуществляется следующим образом:  
+
+As one side sends N data bytes, it increases its SEQ by that number  
+Когда одна сторона отправляет N байт данных, она увеличивает свой SEQ на это число  
+
+When the other side acknowledges receipt of that packet (or a string of packets), it sends an ACK packet with the ACK value equal to the last received sequence from the other  
+Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны  
+
+To close the connection:  
+Чтобы закрыть соединение:  
+
+The closer sends a FIN packet  
+Closer отправляет пакет FIN  
+
+The other sides ACKs the FIN packet and sends its own FIN
+The closer acknowledges the other side's FIN with an ACK   
 Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN
 Closer подтверждает подтверждение FIN другой стороны  
 
 TLS handshake  
-Рукопожатие по протоколу TLS 
+Рукопожатие по протоколу TLS  
+----------------------------------  
 The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
 The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
 The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.
@@ -316,7 +326,7 @@ HTTP protocol. If the web browser used was written by Google, instead of sending
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
 Если клиент использует протокол HTTP и не поддерживает SPDY, он отправляет запрос на сервер вида:  
 
-GET / HTTP/1.1  
+#### GET / HTTP/1.1  
 Host: google.com  
 Connection: close  
 [other headers]  
@@ -337,16 +347,16 @@ After sending the request and headers, the web browser sends a single blank newl
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
 Сервер выдает код ответа, обозначающий статус запроса, и выдает ответ следующего вида:  
-200 OK
+#### 200 OK
 [response headers]
 Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
 If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
-200 ОК
+#### 200 ОК
 [заголовки ответа]
 За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
 Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
 
-304 Not Modified  
+#### 304 Not Modified  
 [response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
 After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
@@ -355,7 +365,7 @@ If the HTML referenced a resource on a different domain than www.google.com, the
 После синтаксического анализа HTML веб-браузер (и сервер) повторяет этот процесс для каждого ресурса (изображения, CSS, favicon.ico и т.д.), на который ссылается HTML-страница, за исключением того, что вместо GET / HTTP/1.1 запрос будет GET /$(URL относительно www.google.com) HTTP/1.1.  
 Если HTML-код ссылается на ресурс, расположенный в домене, отличном от www.google.com, веб-браузер возвращается к шагам, связанным с разрешением доступа к другому домену, и выполняет все действия до этого момента для этого домена. В заголовке Host в запросе будет указано соответствующее имя сервера вместо google.com.  
 
-HTTP Server Request Handle  
+### HTTP Server Request Handle  
 Дескриптор запроса HTTP-сервера  
 The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.  
 The HTTPD (HTTP Daemon) receives the request.  
@@ -386,8 +396,8 @@ Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the brow
 За кулисами браузера
 Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
-Parsing - HTML, CSS, JS  
-Синтаксический анализ - HTML, CSS, JS  
+### Parsing - HTML, CSS, JS  
+### Синтаксический анализ - HTML, CSS, JS  
 
 Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
@@ -429,7 +439,7 @@ Data storage: The data storage is a persistence layer. The browser may need to s
 Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.
 Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
-HTML parsing  
+### HTML parsing  
 Синтаксический анализ HTML  
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
 The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
@@ -461,7 +471,7 @@ Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any 
 На этом этапе браузер помечает документ как интерактивный и запускает синтаксический анализ сценариев, которые находятся в "отложенном" режиме: те, которые должны быть выполнены после анализа документа. Состояние документа устанавливается на "завершено" и запускается событие "загрузка".  
 Обратите внимание, что на HTML-странице никогда не появляется ошибка "Недопустимый синтаксис". Браузеры исправляют любое недопустимое содержимое и продолжают работу.  
 
-CSS interpretation  
+### CSS interpretation  
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"  
 Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.  
 A CSS parser can be top-down or bottom-up when a specific parser generator is used.  
@@ -470,7 +480,7 @@ A CSS parser can be top-down or bottom-up when a specific parser generator is us
 Каждый файл CSS преобразуется в объект таблицы стилей, где каждый объект содержит правила CSS с селекторами и объектами, соответствующими грамматике CSS.  
 Синтаксический анализатор CSS может работать как сверху вниз, так и снизу вверх, когда используется определенный генератор синтаксических анализаторов.  
 
-Page Rendering  
+### Page Rendering  
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
 Calculate the actual width of each node top-down by allocating each node's available width to its children.
@@ -498,14 +508,14 @@ Final layer positions are computed and the composite commands are issued via Dir
 Слои страницы отправляются в процесс компоновки, где они объединяются со слоями для другого видимого контента, такого как браузер chrome, iframes и дополнительные панели.
 Вычисляются окончательные позиции слоев и выполняются команды компоновки с помощью Direct3D/OpenGL. Буферы команд графического процессора загружаются в графический процессор для асинхронного рендеринга, и кадр отправляется на оконный сервер. 
 
-GPU Rendering  
+### GPU Rendering  
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.  
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.  
 Рендеринг на GPU  
 В процессе рендеринга графические вычислительные уровни также могут использовать CPU общего назначения или графический процессор GPU.  
 При использовании графического процессора для вычислений графического рендеринга уровни графического программного обеспечения разделяют задачу на несколько частей, что позволяет использовать преимущества массового параллелизма графического процессора для вычислений с плавающей запятой, необходимых для процесса рендеринга.  
   
-Window Server  
+### Window Server  
 Post-rendering and user-induced execution  
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
 Оконный сервер  
