@@ -14,7 +14,7 @@ This is all licensed under the terms of the Creative Commons Zero license.
 
 **Содержание**
 
-1. (The "g" key is pressed - Нажата клавиша "g".)[#1-the-g-key-is-pressed]  
+1. [The "g" key is pressed - Нажата клавиша "g".](#1-the-g-key-is-pressed)  
 2. The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.  
 3. Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].  
 4.1 (On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.  
