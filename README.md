@@ -15,30 +15,30 @@ This is all licensed under the terms of the Creative Commons Zero license.
 **Содержание**
 
 1. [The "g" key is pressed - Нажата клавиша "g".](#1-the-g-key-is-pressed)  
-2. The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.  
-3. Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].  
-4.1 (On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.  
-4.2 (On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.  
-4.3 (On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.  
-5. Parse URL - Парсинг URL.  
-6. Is it a URL or a search term? - Это URL или поисковый запрос?  
-7. Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.  
-8. Check HSTS list - Проверка списка HSTS.  
-9. DNS lookup - Поиск DNS.  
-10. ARP process - Процесс ARP.  
-11. Opening of a socket - Открытие сокета.  
-12. TLS handshake - Установление связи TLS.  
-13. If a packet is dropped - Если пакет отброшен?!  
-14. HTTP protocol - Протокол HTTP.  
-15. HTTP Server Request Handle - Обработка запроса HTTP сервера.  
-16. Behind the scenes of the Browser - За кулисами браузера.  
-17. Browser - Браузер.  
-18. HTML parsing - Парсинг HTML.  
-19. CSS interpretation - Интерпретация CSS.  
-20. Page Rendering - Рендеринг страницы.  
-21. GPU Rendering - Рендеринг процессора.  
-22. Window Server - Сервер Windows. 
-23. Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.  
+2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](2-the-enter-key-bottoms-out)  
+3. [Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].](#3-interrupt-fires-not-for-usb-keyboards)  
+  3.1 [(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.](#31-on-windows-a-wm_keydown-message-is-sent-to-the-app)  
+  3.2 (On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.  
+  3.3 (On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.  
+4. Parse URL - Парсинг URL.  
+5. Is it a URL or a search term? - Это URL или поисковый запрос?  
+6. Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.  
+7. Check HSTS list - Проверка списка HSTS.  
+8. DNS lookup - Поиск DNS.  
+9. ARP process - Процесс ARP.  
+10. Opening of a socket - Открытие сокета.  
+11. TLS handshake - Установление связи TLS.  
+12. If a packet is dropped - Если пакет отброшен?!  
+13. HTTP protocol - Протокол HTTP.  
+14. HTTP Server Request Handle - Обработка запроса HTTP сервера.  
+15. Behind the scenes of the Browser - За кулисами браузера.  
+16. Browser - Браузер.  
+17. HTML parsing - Парсинг HTML.  
+18. CSS interpretation - Интерпретация CSS.  
+19. Page Rendering - Рендеринг страницы.  
+20. GPU Rendering - Рендеринг процессора.  
+21. Window Server - Сервер Windows. 
+22. Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.  
 
 The following sections explain the physical keyboard actions and the OS interrupts.  
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы.  
