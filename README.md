@@ -185,12 +185,12 @@ The route table is looked up, to see if the Target IP address is on any of the s
 
 ### 9.1 **ARP Request:**   
 ### 9.1 **Запрос ARP:**   
-'''
+```
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
 Target IP: target.ip.goes.here  
-'''
+```   
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
 
@@ -215,20 +215,20 @@ If the router is on the same "wire", it will respond with an ARP Reply (see belo
 
 ### 9.4 **ARP Reply:**  
 ### 9.4 **ARP-ответ:**  
-'''
+```
 Sender MAC: target:mac:address:here  
 Sender IP: target.ip.goes.here  
 Target MAC: interface:mac:address:here  
 Target IP: interface.ip.goes.here  
-'''
+```  
 
 Now that the network library has the IP address of either our DNS server or the default gateway it can resume its DNS process:  
-'''
+```
 MAC отправителя: адрес назначения:mac-адрес:здесь  
 IP отправителя: target.ip.goes.здесь  
 Целевой MAC: интерфейс:mac:адрес:здесь  
 Целевой IP: interface.ip.goes.здесь  
-'''
+```  
 Теперь, когда у сетевой библиотеки есть IP-адрес либо нашего DNS-сервера, либо шлюза по умолчанию, она может возобновить процесс tsDNS:  
 
 The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.  
@@ -253,14 +253,14 @@ The packet next arrives at the Link Layer. A frame header is added that includes
 At this point the packet is ready to be transmitted through either:  
 Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.  
 На этом этапе пакет готов к передаче через любой из:  
-'''
+```
 Ethernet  
 Локальная сеть  
 WiFi  
 Wi-Fi  
 Cellular data network  
 Сотовая сеть передачи данных  
-'''
+```  
 For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.  
 Для большинства подключений к Интернету для дома или малого бизнеса пакет передается с вашего компьютера, возможно, через локальную сеть, а затем через модем (модулятор/демодулятор), который преобразует цифровые 1 и 0 в аналоговый сигнал, пригодный для передачи по телефонным, кабельным или беспроводным телефонным соединениям. На другом конце соединения находится другой модем, который преобразует аналоговый сигнал обратно в цифровые данные для обработки следующим узлом сети, где адреса "от" и "к" будут проанализированы дополнительно.  
 
@@ -350,18 +350,18 @@ If the web browser used was written by Google, instead of sending an HTTP reques
 
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
 Если клиент использует протокол HTTP и не поддерживает SPDY, он отправляет запрос на сервер вида:  
-'''
+```
 **GET / HTTP/1.1**  
 **Host: google.com**  
 **Connection: close**  
 [other headers]  
-'''
-'''
+```  
+```
 **ПОЛУЧИТЬ / HTTP/1.1**  
 **Хост: google.com**  
 **Соединение: закрыть**  
 **[другие заголовки]**  
-'''
+```  
 where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)  
 где [другие заголовки] относятся к серии пар ключ-значение, разделенных двоеточием, отформатированных в соответствии со спецификацией HTTP и разделенных отдельными символами новой строки. (Предполагается, что в используемом веб-браузере нет ошибок, нарушающих спецификацию HTTP. Это также предполагает, что веб-браузер использует HTTP/1.1, в противном случае он может не включать заголовок Host в запрос, и версия, указанная в запросе GET, будет либо HTTP/1.0, либо HTTP/0.9.)  
 
@@ -375,24 +375,23 @@ After sending the request and headers, the web browser sends a single blank newl
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
 Сервер выдает код ответа, обозначающий статус запроса, и выдает ответ следующего вида:  
-'''
+```
 **200 OK**  
 [response headers]  
-'''
-'''
+```  
+```
 **200 ОК**  
 [заголовки ответа]  
-'''
-
+```  
 Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
 За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
 
 If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
 Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
-'''
+```
 **304 Not Modified**  
 304 Не изменено  
-'''
+```  
 [response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
 After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
@@ -413,7 +412,7 @@ The server breaks down the request to the following parameters:
 
 HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
 Domain, in this case - google.com.  
-Метод HTTP-запроса ('GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE'). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
+Метод HTTP-запроса (`GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE`). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
 Домен, в данном случае - 'google.com'.  
 
 Requested path/page, in this case - / (as no specific path/page was requested, / is the default path).  
@@ -436,8 +435,8 @@ The server parses the file according to the handler. If Google is running on PHP
 ## 15. Behind the scenes of the Browser  
 ## 15. За кулисами браузера  
 
-Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
-Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
+Once the server supplies the resources (`HTML, CSS, JS, images, etc.`) to the browser it undergoes the below process:  
+Как только сервер предоставляет ресурсы (`HTML, CSS, JS, изображения и т.д.`) браузеру, он выполняет описанный ниже процесс:  
 
 * Parsing - HTML, CSS, JS  
 * Синтаксический анализ - HTML, CSS, JS  
