@@ -12,7 +12,7 @@ This is a collaborative process, so dig in and try to help out! There are tons o
 This is all licensed under the terms of the Creative Commons Zero license.  
 Распространяется на условиях Creative Commons Zero license.  
 
-**Содержание**
+### **Содержание**
 
 1. [The "g" key is pressed - Нажата клавиша "g".](#1-нажата-клавиша-g)  
 2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](#2-клавиша-enter-опускается-до-самого-низа)  
@@ -123,9 +123,9 @@ Protocol "http"
 Use 'Hyper Text Transfer Protocol'  
 Resource "/"  
 Retrieve main (index) page  
-Протокол "http"
-Используйте "Протокол передачи гипертекста"
-Ресурс "/"
+Протокол "http"  
+Используйте "Протокол передачи гипертекста"  
+Ресурс "/"  
 Извлеките главную (индексную) страницу  
 
 ## 5. Is it a URL or a search term?  
@@ -155,7 +155,7 @@ If the website is in the list, the browser sends its request via HTTPS instead o
 Browser checks if the domain is in its cache. (to see the DNS Cache in Chrome, go to chrome://net-internals/#dns).
 If not found, the browser calls gethostbyname library function (varies by OS) to do the lookup.
 gethostbyname checks if the hostname can be resolved by reference in the local hosts file (whose location varies by OS) before trying to resolve the hostname through DNS.
-If gethostbyname does not have it cached nor can find it in the hosts file then it makes a request to the DNS server configured in the network stack. This is typically the local router or the ISP's caching DNS server.
+If gethostbyname does not have it cached nor can find it in the hosts file then it makes a request to the DNS server configured in the network stack. This is typically the local router or the ISP's caching DNS server.  
 Браузер проверяет, есть ли домен в его кэше. (чтобы просмотреть кэш DNS в Chrome, перейдите по ссылке chrome://net-internals/#dns).
 Если он не найден, браузер вызывает библиотечную функцию gethostbyname (зависит от операционной системы) для выполнения поиска.
 gethostbyname проверяет, можно ли разрешить имя хоста по ссылке в локальном файле hosts (расположение которого зависит от операционной системы), прежде чем пытаться разрешить имя хоста через DNS.
@@ -169,28 +169,30 @@ If the DNS server is on a different subnet, the network library follows the ARP 
 ## 9. ARP process  
 ## 9. Процесс ARP (протокол разрешения адресов)  
 
-In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.
+In order to send an ARP (Address Resolution Protocol) broadcast the network stack library needs the target IP address to lookup. It also needs to know the MAC address of the interface it will use to send out the ARP broadcast.  
 Для отправки широковещательной передачи по протоколу ARP (протокол разрешения адресов) библиотеке сетевого стека необходим целевой IP-адрес для поиска. Ей также необходимо знать MAC-адрес интерфейса, который она будет использовать для отправки широковещательной передачи по протоколу ARP.  
 
 The ARP cache is first checked for an ARP entry for our target IP. If it is in the cache, the library function returns the result: Target IP = MAC.  
 Сначала кэш ARP проверяется на наличие записи ARP для нашего целевого IP. Если она есть в кэше, библиотечная функция возвращает результат: Целевой IP = MAC.  
+
 If the entry is not in the ARP cache:  
 Если записи нет в кэше ARP:  
 
-The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway. The MAC address of the selected network interface is looked up.
-The network library sends a Layer 2 (data link layer of the OSI model) ARP request:
+The route table is looked up, to see if the Target IP address is on any of the subnets on the local route table. If it is, the library uses the interface associated with that subnet. If it is not, the library uses the interface that has the subnet of our default gateway. The MAC address of the selected network interface is looked up. The network library sends a Layer 2 (data link layer of the OSI model) ARP request:  
 Выполняется просмотр таблицы маршрутов, чтобы узнать, находится ли целевой IP-адрес в какой-либо из подсетей в локальной таблице маршрутов. Если это так, библиотека использует интерфейс, связанный с этой подсетью. Если это не так, библиотека использует интерфейс, который имеет подсеть нашего шлюза по умолчанию. Выполняется поиск MAC-адреса выбранного сетевого интерфейса. Сетевая библиотека отправляет ARP-запрос уровня 2 (канальный уровень модели OSI):  
 
 ### 9.1 **ARP Request:**   
 ### 9.1 **Запрос ARP:**   
+'''
 Sender MAC: interface:mac:address:here  
 Sender IP: interface.ip.goes.here  
 Target MAC: FF:FF:FF:FF:FF:FF (Broadcast)  
 Target IP: target.ip.goes.here  
+'''
 Depending on what type of hardware is between the computer and the router:  
 В зависимости от того, какой тип оборудования находится между компьютером и маршрутизатором:  
 
-### 9.2 **Directly connected:**   
+### 9.2 **Directly connected:**  
 ### 9.2 **Прямое подключение:**  
 
 If the computer is directly connected to the router the router response with an ARP Reply (see below) Hub:  
@@ -211,16 +213,20 @@ If the router is on the same "wire", it will respond with an ARP Reply (see belo
 
 ### 9.4 **ARP Reply:**  
 ### 9.4 **ARP-ответ:**  
-
+'''
 Sender MAC: target:mac:address:here  
 Sender IP: target.ip.goes.here  
 Target MAC: interface:mac:address:here  
 Target IP: interface.ip.goes.here  
+'''
+
 Now that the network library has the IP address of either our DNS server or the default gateway it can resume its DNS process:  
+'''
 MAC отправителя: адрес назначения:mac-адрес:здесь  
 IP отправителя: target.ip.goes.здесь  
 Целевой MAC: интерфейс:mac:адрес:здесь  
 Целевой IP: interface.ip.goes.здесь  
+'''
 Теперь, когда у сетевой библиотеки есть IP-адрес либо нашего DNS-сервера, либо шлюза по умолчанию, она может возобновить процесс tsDNS:  
 
 The DNS client establishes a socket to UDP port 53 on the DNS server, using a source port above 1023.  
@@ -245,14 +251,14 @@ The packet next arrives at the Link Layer. A frame header is added that includes
 At this point the packet is ready to be transmitted through either:  
 Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.  
 На этом этапе пакет готов к передаче через любой из:  
-
+'''
 Ethernet  
 Локальная сеть  
 WiFi  
 Wi-Fi  
 Cellular data network  
 Сотовая сеть передачи данных  
-
+'''
 For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.  
 Для большинства подключений к Интернету для дома или малого бизнеса пакет передается с вашего компьютера, возможно, через локальную сеть, а затем через модем (модулятор/демодулятор), который преобразует цифровые 1 и 0 в аналоговый сигнал, пригодный для передачи по телефонным, кабельным или беспроводным телефонным соединениям. На другом конце соединения находится другой модем, который преобразует аналоговый сигнал обратно в цифровые данные для обработки следующим узлом сети, где адреса "от" и "к" будут проанализированы дополнительно.  
 
@@ -265,25 +271,24 @@ Eventually, the packet will reach the router managing the local subnet. From the
 This send and receive happens multiple times following the TCP connection flow:  
 Эта отправка и получение происходят несколько раз в соответствии с потоком TCP-соединений:  
 
-Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN  
-Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
-Server receives SYN and if it's in an agreeable mood:
-Server chooses its own initial sequence number
-Server sets SYN to indicate it is choosing its ISN
-Server copies the (client ISN +1) to its ACK field and adds the ACK flag to indicate it is acknowledging receipt of the first packet  
-Сервер получает SYN и, если он в хорошем настроении:
-Сервер сам выбирает свой начальный порядковый номер
-Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN
-Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета  
-
-Client acknowledges the connection by sending a packet:
-Increases its own sequence number
-Increases the receiver acknowledgment number
-Sets ACK field  
-Клиент подтверждает соединение, отправляя пакет:
-Увеличивает свой собственный порядковый номер
-Увеличивает номер подтверждения получателя
-Устанавливает поле подтверждения  
+* Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN  
+* Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
+* Server receives SYN and if it's in an agreeable mood:
+* Server chooses its own initial sequence number
+* Server sets SYN to indicate it is choosing its ISN
+* Server copies the (client ISN +1) to its ACK field and adds the ACK flag to indicate it is acknowledging receipt of the first packet  
+* Сервер получает SYN и, если он в хорошем настроении:
+* Сервер сам выбирает свой начальный порядковый номер
+* Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN
+* Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета  
+* Client acknowledges the connection by sending a packet:
+* Increases its own sequence number
+* Increases the receiver acknowledgment number
+* Sets ACK field  
+* Клиент подтверждает соединение, отправляя пакет:
+* Увеличивает свой собственный порядковый номер
+* Увеличивает номер подтверждения получателя
+* Устанавливает поле подтверждения  
 
 Data is transferred as follows:  
 Передача данных осуществляется следующим образом:  
@@ -292,7 +297,7 @@ As one side sends N data bytes, it increases its SEQ by that number
 Когда одна сторона отправляет N байт данных, она увеличивает свой SEQ на это число  
 
 When the other side acknowledges receipt of that packet (or a string of packets), it sends an ACK packet with the ACK value equal to the last received sequence from the other  
-Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны  
+Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны 
 
 To close the connection:  
 Чтобы закрыть соединение:  
@@ -300,27 +305,27 @@ To close the connection:
 The closer sends a FIN packet  
 Closer отправляет пакет FIN  
 
-The other sides ACKs the FIN packet and sends its own FIN
+The other sides ACKs the FIN packet and sends its own FIN  
 The closer acknowledges the other side's FIN with an ACK   
-Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN
+Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN  
 Closer подтверждает подтверждение FIN другой стороны  
 
 ## 11. TLS handshake  
 ## 11. Рукопожатие по протоколу TLS  
 
-The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.
-The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.
-The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.  
-The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.  
-The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.  
-The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.  
-From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.  
-Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.
-Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, выбранными методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
-Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
-Сервер расшифровывает случайные байты с помощью своего закрытого ключа и использует эти байты для создания собственной копии симметричного мастер-ключа.
-Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.  
-Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.  
+- The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.  
+- The server replies with a ServerHello message to the client with the TLS version, selected cipher, selected compression methods and the server's public certificate signed by a CA (Certificate Authority). - - The certificate contains a public key that will be used by the client to encrypt the rest of the handshake until a symmetric key can be agreed upon.  
+- The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.  
+- The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.  
+- The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.  
+- The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.  
+- From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.  
+- Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.
+- Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, выбранными методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
+- Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
+- Сервер расшифровывает случайные байты с помощью своего закрытого ключа и использует эти байты для создания собственной копии симметричного мастер-ключа.
+- Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.  
+- Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.  
 
 ## 12. If a packet is dropped  
 ## 12. Если пакет пропущен  
@@ -339,20 +344,22 @@ After reaching the slow-start threshold, the window increases additively for eac
 ## 13. HTTP protocol.  
 ## 13. Протокол HTTP  
 
-If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol.  
-Если используемый веб-браузер был создан компанией Google, то вместо отправки HTTP-запроса для получения страницы он отправит запрос на попытку согласовать с сервером "обновление" с HTTP до протокола SPDY.  
+If the web browser used was written by Google, instead of sending an HTTP request to retrieve the page, it will send a request to try and negotiate with the server an "upgrade" from HTTP to the SPDY protocol. Если используемый веб-браузер был создан компанией Google, то вместо отправки HTTP-запроса для получения страницы он отправит запрос на попытку согласовать с сервером "обновление" с HTTP до протокола SPDY.  
 
 If the client is using the HTTP protocol and does not support SPDY, it sends a request to the server of the form:  
 Если клиент использует протокол HTTP и не поддерживает SPDY, он отправляет запрос на сервер вида:  
-
+'''
 **GET / HTTP/1.1**  
 **Host: google.com**  
 **Connection: close**  
 [other headers]  
+'''
+'''
 **ПОЛУЧИТЬ / HTTP/1.1**  
 **Хост: google.com**  
 **Соединение: закрыть**  
 **[другие заголовки]**  
+'''
 where [other headers] refers to a series of colon-separated key-value pairs formatted as per the HTTP specification and separated by single newlines. (This assumes the web browser being used doesn't have any bugs violating the HTTP spec. This also assumes that the web browser is using HTTP/1.1, otherwise it may not include the Host header in the request and the version specified in the GET request will either be HTTP/1.0 or HTTP/0.9.)  
 где [другие заголовки] относятся к серии пар ключ-значение, разделенных двоеточием, отформатированных в соответствии со спецификацией HTTP и разделенных отдельными символами новой строки. (Предполагается, что в используемом веб-браузере нет ошибок, нарушающих спецификацию HTTP. Это также предполагает, что веб-браузер использует HTTP/1.1, в противном случае он может не включать заголовок Host в запрос, и версия, указанная в запросе GET, будет либо HTTP/1.0, либо HTTP/0.9.)  
 
@@ -366,19 +373,24 @@ After sending the request and headers, the web browser sends a single blank newl
 
 The server responds with a response code denoting the status of the request and responds with a response of the form:  
 Сервер выдает код ответа, обозначающий статус запроса, и выдает ответ следующего вида:  
-
+'''
 **200 OK**  
 [response headers]  
+'''
+'''
 **200 ОК**  
 [заголовки ответа]  
+'''
 
 Followed by a single newline, and then sends a payload of the HTML content of www.google.com. The server may then either close the connection, or if headers sent by the client requested it, keep the connection open to be reused for further requests.  
-If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
 За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
-Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
 
+If the HTTP headers sent by the web browser included sufficient information for the webserver to determine if the version of the file cached by the web browser has been unmodified since the last retrieval (ie. if the web browser included an ETag header), it may instead respond with a request of the form:  
+Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
+'''
 **304 Not Modified**  
 304 Не изменено  
+'''
 [response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
 After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
@@ -399,24 +411,24 @@ The server breaks down the request to the following parameters:
 
 HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
 Domain, in this case - google.com.  
-Метод HTTP-запроса (GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
-Домен, в данном случае - google.com.  
+Метод HTTP-запроса ('GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE'). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
+Домен, в данном случае - 'google.com'.  
 
 Requested path/page, in this case - / (as no specific path/page was requested, / is the default path).  
 Запрашиваемый путь/страница, в данном случае - / (поскольку конкретный путь/страница не запрашивались, по умолчанию используется путь /).  
 
-The server verifies that there is a Virtual Host configured on the server that corresponds with google.com.  
-The server verifies that google.com can accept GET requests.  
-The server verifies that the client is allowed to use this method (by IP, authentication, etc.).  
-Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.  
-Сервер проверяет, может ли google.com принимать запросы GET.  
-Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).  
++ The server verifies that there is a Virtual Host configured on the server that corresponds with google.com.  
++ The server verifies that google.com can accept GET requests.  
++ The server verifies that the client is allowed to use this method (by IP, authentication, etc.).  
++ Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.  
++ Сервер проверяет, может ли google.com принимать запросы GET.  
++ Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).  
 
 If the server has a rewrite module installed (like mod_rewrite for Apache or URL Rewrite for IIS), it tries to match the request against one of the configured rules. If a matching rule is found, the server uses that rule to rewrite the request.  
 The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).  
 The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.  
-Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.
-Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).
+Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.  
+Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).  
 Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.  
 
 ## 15. Behind the scenes of the Browser  
@@ -425,63 +437,59 @@ The server parses the file according to the handler. If Google is running on PHP
 Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
 Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
-Parsing - HTML, CSS, JS  
-Синтаксический анализ - HTML, CSS, JS  
-Parsing - HTML, CSS, JS  
-Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree  
-Рендеринг - Построение дерева DOM → Дерево рендеринга → Макет дерева рендеринга → Отображение дерева рендеринга в браузере  
+* Parsing - HTML, CSS, JS  
+* Синтаксический анализ - HTML, CSS, JS  
+* Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree  
+* Рендеринг - Построение дерева DOM → Дерево рендеринга → Макет дерева рендеринга → Отображение дерева рендеринга в браузере  
 
 ## 16. Browser  
 ## 16. Браузер  
 
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
-
 Функциональность браузера заключается в представлении выбранного вами веб-ресурса путем запроса его с сервера и отображения в окне браузера. Ресурс обычно представляет собой HTML-документ, но также может быть в формате PDF, с изображением или каким-либо другим типом содержимого. Местоположение ресурса определяется пользователем с помощью URI (Uniform Resource Identifier).  
 
-The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.  
+The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.    
 Способ, которым браузер интерпретирует и отображает HTML-файлы, указан в спецификациях HTML и CSS. Эти спецификации поддерживаются организацией W3C (World Wide Web Consortium), которая является организацией по стандартизации в Интернете.  
 
 Browser user interfaces have a lot in common with each other. Among the common user interface elements are:  
 Пользовательские интерфейсы браузеров имеют много общего друг с другом. К числу общих элементов пользовательского интерфейса относятся:  
 
-An address bar for inserting a URI  
-Адресная строка для ввода URI  
+* An address bar for inserting a URI  
+* Адресная строка для ввода URI  
+* Back and forward buttons  
+* Bookmarking options  
+* Кнопки "Назад" и "Вперед"  
+* Параметры закладок  
 
-Back and forward buttons  
-Bookmarking options  
-Кнопки "Назад" и "Вперед"  
-Параметры закладок  
-
-Refresh and stop buttons for refreshing or stopping the loading of current documents  
+Refresh and stop buttons for refreshing or stopping the loading of current documents
 Home button that takes you to your home page  
+Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
+Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
 
 **Browser High-Level Structure**  
 **Высокоуровневая структура браузера**  
 
-Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
-Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
-
 The components of the browsers are:  
 Компонентами браузеров являются:  
 
-User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.  
-Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.  
++ User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.  
++ Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.  
 
-Browser engine: The browser engine marshals actions between the UI and the rendering engine.  
-Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.  
++ Browser engine: The browser engine marshals actions between the UI and the rendering engine.  
++ Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.  
 
-Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.  
-Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.  
++ Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.  
++ Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.  
 
-Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
-UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.  
-Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.  
-Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.  
++ Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
++ UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.  
++ Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.  
++ Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.  
 
-JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.  
-Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
-Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.  
-Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
++ JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.  
++ Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
++ Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.  
++ Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
 ## 17. HTML parsing  
 ## 17. Синтаксический анализ HTML  
