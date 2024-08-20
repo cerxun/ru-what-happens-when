@@ -51,13 +51,13 @@ The following sections explain the physical keyboard actions and the OS interrup
 ## **1. The "g" key is pressed**  
 ## **1. Нажата клавиша "g"**  
 
-When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.
+When you press the key "g" the browser receives the event and the auto-complete functions kick in. Depending on your browser's algorithm and if you are in private/incognito mode or not various suggestions will be presented to you in the dropdown below the URL bar. Most of these algorithms sort and prioritize results based on search history, bookmarks, cookies, and popular searches from the internet as a whole. As you are typing "google.com" many blocks of code run and the suggestions will be refined with each keypress. It may even suggest "google.com" before you finish typing it.  
 При нажатии клавиши "g" браузер получает сообщение о событии и запускает функции автозаполнения. В зависимости от алгоритма работы вашего браузера и от того, находитесь ли вы в режиме приватности / инкогнито или нет, вам будут представлены различные предложения в выпадающем списке под строкой URL. Большинство из этих алгоритмов сортируют и определяют приоритетность результатов на основе истории поиска, закладок, файлов cookie и популярных поисковых запросов в Интернете в целом. При вводе "google.com" запускается множество блоков кода, и предложения будут уточняться с каждым нажатием клавиши. Он может даже предложить "google.com" до того, как вы закончите вводить его.  
 
 ## **2. The "enter" key bottoms out**  
 ## **2. Клавиша "enter" опускается до самого низа**  
 
-To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.
+To pick a zero point, let's choose the Enter key on the keyboard hitting the bottom of its range. At this point, an electrical circuit specific to the enter key is closed (either directly or capacitively). This allows a small amount of current to flow into the logic circuitry of the keyboard, which scans the state of each key switch, debounces the electrical noise of the rapid intermittent closure of the switch, and converts it to a keycode integer, in this case 13. The keyboard controller then encodes the keycode for transport to the computer. This is now almost universally over a Universal Serial Bus (USB) or Bluetooth connection, but historically has been over PS/2 or ADB connections.  
 Чтобы выбрать нулевую точку, давайте нажмем клавишу Enter на клавиатуре в нижней части диапазона клавиш. В этот момент электрическая цепь, соответствующая клавише *Enter*, замыкается (либо напрямую, либо емкостно). Это позволяет небольшому количеству тока поступать в логическую схему клавиатуры, которая сканирует состояние каждого переключателя клавиш, устраняет электрические помехи, возникающие при быстром прерывистом замыкании переключателя, и преобразует их в целое число с кодом клавиши, в данном случае 13. Затем контроллер клавиатуры кодирует код клавиши для передачи на компьютер. В настоящее время это почти повсеместно осуществляется через универсальную последовательную шину (USB) или Bluetooth-соединение, но исторически это происходило через PS/2 или ADB-соединения.
 
 ### 2.1 **In the case of the USB keyboard:**  
@@ -67,7 +67,7 @@ The USB circuitry of the keyboard is powered by the 5V supply provided over pin 
 The keycode generated is stored by internal keyboard circuitry memory in a register called "endpoint".
 The host USB controller polls that "endpoint" every ~10ms (minimum value declared by the keyboard), so it gets the keycode value stored on it.
 This value goes to the USB SIE (Serial Interface Engine) to be converted in one or more USB packets that follow the low-level USB protocol.
-Those packets are sent by a differential electrical signal over D+ and D- pins (the middle 2) at a maximum speed of 1.5 Mb/s, as an HID (Human Interface Device) device is always declared to be a "low-speed device" (USB 2.0 compliance).
+Those packets are sent by a differential electrical signal over D+ and D- pins (the middle 2) at a maximum speed of 1.5 Mb/s, as an HID (Human Interface Device) device is always declared to be a "low-speed device" (USB 2.0 compliance).  
 This serial signal is then decoded at the computer's host USB controller, and interpreted by the computer's Human Interface Device (HID) universal keyboard device driver. The value of the key is then passed into the operating system's hardware abstraction layer.  
 USB-схема клавиатуры питается от источника питания напряжением 5 В, подключенного к контакту 1 USB-контроллера компьютера. Сгенерированный код ключа сохраняется во внутренней памяти клавиатуры в регистре, называемом "конечная точка". Главный USB-контроллер опрашивает эту "конечную точку" каждые ~10 мс (минимальное значение, объявленное клавиатурой), поэтому он получает сохраненное на нем значение кода ключа. Это значение передается в USB SIE (модуль последовательного интерфейса) для преобразования в один или несколько USB-пакетов, которые соответствуют низкоуровневому USB-протоколу. Эти пакеты передаются с помощью дифференциального электрического сигнала по контактам D+ и D-link (средние 2) с максимальной скоростью 1,5 Мб/с, поскольку устройство HID (устройство для взаимодействия с человеком) всегда считается "низкоскоростным устройством" (соответствует стандарту USB 2.0). Этот последовательный сигнал затем декодируется на главном USB-контроллере компьютера и интерпретируется драйвером универсального клавиатурного устройства HID компьютера. Значение ключа затем передается на уровень аппаратной абстракции операционной системы.  
 
@@ -119,6 +119,7 @@ When a graphical X server is used, X will use the generic event driver evdev to 
 The browser now has the following information contained in the URL (Uniform Resource Locator):
 Теперь браузер имеет следующую информацию, содержащуюся в URL-адресе (единый указатель ресурсов):
 
+```
 Protocol "http"  
 Use 'Hyper Text Transfer Protocol'  
 Resource "/"  
@@ -127,6 +128,7 @@ Retrieve main (index) page
 Используйте "Протокол передачи гипертекста"  
 Ресурс "/"  
 Извлеките главную (индексную) страницу  
+```
 
 ## 5. Is it a URL or a search term?  
 ## 5. Это URL-адрес или поисковый запрос?  
