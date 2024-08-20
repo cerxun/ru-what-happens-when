@@ -368,48 +368,55 @@ If the HTTP headers sent by the web browser included sufficient information for 
 За которыми следует одна новая строка, а затем отправляется полезная нагрузка в виде HTML-содержимого www.google.com. Затем сервер может либо закрыть соединение, либо, если заголовки, отправленные клиентом, запрашивают это, сохранить соединение открытым для повторного использования для дальнейших запросов.  
 Если HTTP-заголовки, отправленные веб-браузером, содержат достаточную информацию для веб-сервера, чтобы определить, была ли версия файла, кэшированного веб-браузером, неизменена с момента последнего извлечения (т.е. если веб-браузер включил заголовок ETag), он может вместо этого ответить запросом формы:  
 
-#### 304 Not Modified  
+**304 Not Modified**  
+304 Не изменено  
 [response headers] and no payload, and the web browser instead retrieve the HTML from its cache.  
 After parsing the HTML, the web browser (and server) repeats this process for every resource (image, CSS, favicon.ico, etc) referenced by the HTML page, except instead of GET / HTTP/1.1 the request will be GET /$(URL relative to www.google.com) HTTP/1.1.  
 If the HTML referenced a resource on a different domain than www.google.com, the web browser goes back to the steps involved in resolving the other domain, and follows all steps up to this point for that domain. The Host header in the request will be set to the appropriate server name instead of google.com.  
-304 Не изменено  
 [заголовки ответов] и нет полезной нагрузки, а веб-браузер вместо этого извлекает HTML из своего кэша.  
 После синтаксического анализа HTML веб-браузер (и сервер) повторяет этот процесс для каждого ресурса (изображения, CSS, favicon.ico и т.д.), на который ссылается HTML-страница, за исключением того, что вместо GET / HTTP/1.1 запрос будет GET /$(URL относительно www.google.com) HTTP/1.1.  
 Если HTML-код ссылается на ресурс, расположенный в домене, отличном от www.google.com, веб-браузер возвращается к шагам, связанным с разрешением доступа к другому домену, и выполняет все действия до этого момента для этого домена. В заголовке Host в запросе будет указано соответствующее имя сервера вместо google.com.  
 
-### HTTP Server Request Handle  
-Дескриптор запроса HTTP-сервера  
+## 15. HTTP Server Request Handle  
+## 15. Дескриптор запроса HTTP-сервера  
+
 The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.  
-The HTTPD (HTTP Daemon) receives the request.  
-The server breaks down the request to the following parameters:
-HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
-Domain, in this case - google.com.
-Requested path/page, in this case - / (as no specific path/page was requested, / is the default path).
-The server verifies that there is a Virtual Host configured on the server that corresponds with google.com.
-The server verifies that google.com can accept GET requests.
-The server verifies that the client is allowed to use this method (by IP, authentication, etc.).
-If the server has a rewrite module installed (like mod_rewrite for Apache or URL Rewrite for IIS), it tries to match the request against one of the configured rules. If a matching rule is found, the server uses that rule to rewrite the request.
-The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).
-The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.
-Behind the scenes of the Browser
-Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
 Сервер HTTPD (HTTP-демон) обрабатывает запросы и ответы на стороне сервера. Наиболее распространенными HTTPD-серверами являются Apache или nginx для Linux и IIS для Windows.  
+The HTTPD (HTTP Daemon) receives the request.  
 Запрос получает HTTPD (HTTP-демон).  
-Сервер разбивает запрос на следующие параметры:
+
+The server breaks down the request to the following parameters:  
+Сервер разбивает запрос на следующие параметры:  
+
+HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
+Domain, in this case - google.com.  
 Метод HTTP-запроса (GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
-Домен, в данном случае - google.com.
-Запрашиваемый путь/страница, в данном случае - / (поскольку конкретный путь/страница не запрашивались, по умолчанию используется путь /).
-Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.
-Сервер проверяет, может ли google.com принимать запросы GET.
-Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).
+Домен, в данном случае - google.com.  
+
+Requested path/page, in this case - / (as no specific path/page was requested, / is the default path).  
+Запрашиваемый путь/страница, в данном случае - / (поскольку конкретный путь/страница не запрашивались, по умолчанию используется путь /).  
+
+The server verifies that there is a Virtual Host configured on the server that corresponds with google.com.  
+The server verifies that google.com can accept GET requests.  
+The server verifies that the client is allowed to use this method (by IP, authentication, etc.).  
+Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.  
+Сервер проверяет, может ли google.com принимать запросы GET.  
+Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).  
+
+If the server has a rewrite module installed (like mod_rewrite for Apache or URL Rewrite for IIS), it tries to match the request against one of the configured rules. If a matching rule is found, the server uses that rule to rewrite the request.  
+The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).  
+The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.
+Behind the scenes of the Browser  
 Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.
 Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).
 Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.
-За кулисами браузера
+За кулисами браузера  
+
+Once the server supplies the resources (HTML, CSS, JS, images, etc.) to the browser it undergoes the below process:  
 Как только сервер предоставляет ресурсы (HTML, CSS, JS, изображения и т.д.) браузеру, он выполняет описанный ниже процесс:  
 
-### Parsing - HTML, CSS, JS  
-### Синтаксический анализ - HTML, CSS, JS  
+## 16. Parsing - HTML, CSS, JS  
+## 16. Синтаксический анализ - HTML, CSS, JS  
 
 Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree Browser  
 The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
@@ -420,86 +427,103 @@ The way the browser interprets and displays HTML files is specified in the HTML 
 Способ, которым браузер интерпретирует и отображает HTML-файлы, указан в спецификациях HTML и CSS. Эти спецификации поддерживаются организацией W3C (World Wide Web Consortium), которая является организацией по стандартизации в Интернете.  
 
 Browser user interfaces have a lot in common with each other. Among the common user interface elements are:  
+Пользовательские интерфейсы браузеров имеют много общего друг с другом. К числу общих элементов пользовательского интерфейса относятся:  
+
 An address bar for inserting a URI  
+Адресная строка для ввода URI  
+
 Back and forward buttons  
 Bookmarking options  
+Кнопки "Назад" и "Вперед"  
+Параметры закладок  
+
 Refresh and stop buttons for refreshing or stopping the loading of current documents  
 Home button that takes you to your home page  
 Browser High-Level Structure  
-Пользовательские интерфейсы браузеров имеют много общего друг с другом. К числу общих элементов пользовательского интерфейса относятся:  
-Адресная строка для ввода URI  
-Кнопки "Назад" и "Вперед"  
-Параметры закладок  
 Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
 Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
 Высокоуровневая структура браузера  
 
 The components of the browsers are:  
-User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.
-Browser engine: The browser engine marshals actions between the UI and the rendering engine.
-Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.
-Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
-UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.
-JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.
-Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
 Компонентами браузеров являются:  
-Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.
-Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.
-Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.
-Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.
-Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.
-Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.
+
+User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.  
+Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.  
+
+Browser engine: The browser engine marshals actions between the UI and the rendering engine.  
+Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.  
+
+Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.  
+Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.  
+
+Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
+UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.  
+Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.  
+Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.  
+
+JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.  
+Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
+Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.  
 Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
-### HTML parsing  
-Синтаксический анализ HTML  
+## 17. HTML parsing  
+## 17. Синтаксический анализ HTML  
+
 The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
 The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
-The output tree (the "parse tree") is a tree of DOM element and attribute nodes. DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript. The root of the tree is the "Document" object. Prior to any manipulation via scripting, the DOM has an almost one-to-one relation to the markup.
-The parsing algorithm HTML cannot be parsed using the regular top-down or bottom-up parsers.  
+The output tree (the "parse tree") is a tree of DOM element and attribute nodes. DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript. The root of the tree is the "Document" object. Prior to any manipulation via scripting, the DOM has an almost one-to-one relation to the markup.  
 Механизм рендеринга начинает получать содержимое запрошенного документа с сетевого уровня. Обычно это выполняется фрагментами по 8 Кб.  
 Основная задача HTML-анализатора - преобразовать HTML-разметку в дерево синтаксического анализа.  
-Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.
+Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.  
+
+The parsing algorithm HTML cannot be parsed using the regular top-down or bottom-up parsers.  
 Алгоритм синтаксического анализа HTML не может быть проанализирован с помощью обычных синтаксических анализаторов "сверху вниз" или "снизу вверх".  
 
 The reasons are:  
+Причины в том, что:  
+
 The forgiving nature of the language.  
+Язык прост в использовании.  
+
 The fact that browsers have traditional error tolerance to support well known cases of invalid HTML.  
+Тот факт, что браузеры традиционно допускают ошибки для поддержки хорошо известных случаев некорректного HTML.  
+
 The parsing process is reentrant. For other languages, the source doesn't change during parsing, but in HTML, dynamic code (such as script elements containing document.write() calls) can add extra tokens, so the parsing process actually modifies the input.  
 Unable to use the regular parsing techniques, the browser utilizes a custom parser for parsing HTML. The parsing algorithm is described in detail by the HTML5 specification.  
 The algorithm consists of two stages: tokenization and tree construction.  
-Actions when the parsing is finished  
-The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).  
-At this stage the browser marks the document as interactive and starts parsing scripts that are in "deferred" mode: those that should be executed after the document is parsed. The document state is set to "complete" and a "load" event is fired.  
-Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.  
-Причины в том, что:  
-Язык прост в использовании.  
-Тот факт, что браузеры традиционно допускают ошибки для поддержки хорошо известных случаев некорректного HTML.  
+Actions when the parsing is finished   
 Процесс синтаксического анализа является повторным. Для других языков исходный код не меняется во время синтаксического анализа, но в HTML динамический код (например, элементы скрипта, содержащие вызовы document.write()), может добавлять дополнительные токены, поэтому процесс синтаксического анализа фактически изменяет входные данные.  
 Не имея возможности использовать обычные методы синтаксического анализа, браузер использует пользовательский синтаксический анализатор для анализа HTML. Алгоритм синтаксического анализа подробно описан в спецификации HTML5.  
 Алгоритм состоит из двух этапов: токенизации и построения дерева.  
 Действия по завершении синтаксического анализа  
+
+The browser begins fetching external resources linked to the page (CSS, images, JavaScript files, etc.).  
+At this stage the browser marks the document as interactive and starts parsing scripts that are in "deferred" mode: those that should be executed after the document is parsed. The document state is set to "complete" and a "load" event is fired.  
+Note there is never an "Invalid Syntax" error on an HTML page. Browsers fix any invalid content and go on.  
 Браузер начинает извлекать внешние ресурсы, связанные со страницей (CSS, изображения, файлы JavaScript и т.д.).  
 На этом этапе браузер помечает документ как интерактивный и запускает синтаксический анализ сценариев, которые находятся в "отложенном" режиме: те, которые должны быть выполнены после анализа документа. Состояние документа устанавливается на "завершено" и запускается событие "загрузка".  
 Обратите внимание, что на HTML-странице никогда не появляется ошибка "Недопустимый синтаксис". Браузеры исправляют любое недопустимое содержимое и продолжают работу.  
 
-### CSS interpretation  
+## 18. CSS interpretation  
+Интерпретация CSS  
+
 Parse CSS files, <style> tag contents, and style attribute values using "CSS lexical and syntax grammar"  
 Each CSS file is parsed into a StyleSheet object, where each object contains CSS rules with selectors and objects corresponding CSS grammar.  
 A CSS parser can be top-down or bottom-up when a specific parser generator is used.  
-Интерпретация CSS  
 Анализируйте файлы CSS, содержимое тега <style> и значения атрибутов стиля, используя "лексическую и синтаксическую грамматику CSS"  
 Каждый файл CSS преобразуется в объект таблицы стилей, где каждый объект содержит правила CSS с селекторами и объектами, соответствующими грамматике CSS.  
 Синтаксический анализатор CSS может работать как сверху вниз, так и снизу вверх, когда используется определенный генератор синтаксических анализаторов.  
 
-### Page Rendering  
+## 19. Page Rendering  
+## 19. Рендеринг страницы  
+
 Create a 'Frame Tree' or 'Render Tree' by traversing the DOM nodes, and calculating the CSS style values for each node.
 Calculate the preferred width of each node in the 'Frame Tree' bottom-up by summing the preferred width of the child nodes and the node's horizontal margins, borders, and padding.
 Calculate the actual width of each node top-down by allocating each node's available width to its children.
 Calculate the height of each node bottom-up by applying text wrapping and summing the child node heights and the node's margins, borders, and padding.
 Calculate the coordinates of each node using the information calculated above.
 More complicated steps are taken when elements are floated, positioned absolutely or relatively, or other complex features are used. See http://dev.w3.org/csswg/css2/ and http://www.w3.org/Style/CSS/current-work for more details.  
-Рендеринг страницы  
+
 Создайте "Дерево фреймов" или "Дерево рендеринга", пройдя по узлам DOM и вычислив значения стиля CSS для каждого узла.
 Вычислите предпочтительную ширину каждого узла в "Дереве фреймов" снизу вверх, суммируя предпочтительную ширину дочерних узлов и горизонтальные поля, границы и отступы узла.
 Вычислите фактическую ширину каждого узла сверху вниз, распределив доступную ширину каждого узла между его дочерними узлами.
@@ -507,29 +531,32 @@ More complicated steps are taken when elements are floated, positioned absolutel
 Рассчитайте координаты каждого узла, используя информацию, полученную выше.
 Более сложные действия выполняются при перемещении элементов, их абсолютном или относительном расположении или при использовании других сложных функций. Более подробную информацию смотрите в разделах http://dev.w3.org/csswg/css2/ и http://www.w3.org/Style/CSS/current-work.  
 
-Create layers to describe which parts of the page can be animated as a group without being re-rasterized. Each frame/render object is assigned to a layer.
-Textures are allocated for each layer of the page.
-The frame/render objects for each layer are traversed and drawing commands are executed for their respective layer. This may be rasterized by the CPU or drawn on the GPU directly using D2D/SkiaGL.
+Create layers to describe which parts of the page can be animated as a group without being re-rasterized. Each frame/render object is assigned to a layer.  
+Textures are allocated for each layer of the page.  
+The frame/render objects for each layer are traversed and drawing commands are executed for their respective layer. This may be rasterized by the CPU or drawn on the GPU directly using D2D/SkiaGL.  
 All of the above steps may reuse calculated values from the last time the webpage was rendered, so that incremental changes require less work.
 The page layers are sent to the compositing process where they are combined with layers for other visible content like the browser chrome, iframes and addon panels.
 Final layer positions are computed and the composite commands are issued via Direct3D/OpenGL. The GPU command buffer(s) are flushed to the GPU for asynchronous rendering and the frame is sent to the window server.  
 Создайте слои, чтобы описать, какие части страницы можно анимировать как группу, не подвергая их повторной растеризации. Каждый кадр/объект рендеринга присваивается слою.
-Текстуры выделяются для каждого слоя страницы.
-Выполняется обход объектов кадрирования/рендеринга для каждого слоя и выполняются команды рисования для соответствующего слоя. Это может быть растеризовано центральным процессором или отрисовано непосредственно на графическом процессоре с использованием D2D/SkiaGL.
+Текстуры выделяются для каждого слоя страницы.  
+Выполняется обход объектов кадрирования/рендеринга для каждого слоя и выполняются команды рисования для соответствующего слоя. Это может быть растеризовано центральным процессором или отрисовано непосредственно на графическом процессоре с использованием D2D/SkiaGL.  
 Все вышеперечисленные действия могут уменьшить вычисленные значения с момента последнего отображения веб-страницы, так что постепенные изменения потребуют меньше усилий.
 Слои страницы отправляются в процесс компоновки, где они объединяются со слоями для другого видимого контента, такого как браузер chrome, iframes и дополнительные панели.
-Вычисляются окончательные позиции слоев и выполняются команды компоновки с помощью Direct3D/OpenGL. Буферы команд графического процессора загружаются в графический процессор для асинхронного рендеринга, и кадр отправляется на оконный сервер. 
+Вычисляются окончательные позиции слоев и выполняются команды компоновки с помощью Direct3D/OpenGL. Буферы команд графического процессора загружаются в графический процессор для асинхронного рендеринга, и кадр отправляется на оконный сервер.  
 
-### GPU Rendering  
+## 20. GPU Rendering  
+Рендеринг на GPU  
+
 During the rendering process the graphical computing layers can use general purpose CPU or the graphical processor GPU as well.  
 When using GPU for graphical rendering computations the graphical software layers split the task into multiple pieces, so it can take advantage of GPU massive parallelism for float point calculations required for the rendering process.  
-Рендеринг на GPU  
 В процессе рендеринга графические вычислительные уровни также могут использовать CPU общего назначения или графический процессор GPU.  
 При использовании графического процессора для вычислений графического рендеринга уровни графического программного обеспечения разделяют задачу на несколько частей, что позволяет использовать преимущества массового параллелизма графического процессора для вычислений с плавающей запятой, необходимых для процесса рендеринга.  
   
-### Window Server  
+## 21. Window Server  
+Оконный сервер  
 Post-rendering and user-induced execution  
 After rendering has been completed, the browser executes JavaScript code as a result of some timing mechanism (such as a Google Doodle animation) or user interaction (typing a query into the search box and receiving suggestions). Plugins such as Flash or Java may execute as well, although not at this time on the Google homepage. Scripts can cause additional network requests to be performed, as well as modify the page or its layout, causing another round of page rendering and painting.  
-Оконный сервер  
+
 Последующий рендеринг и выполнение под управлением пользователя  
 После завершения рендеринга браузер выполняет код JavaScript в результате некоторого механизма синхронизации (например, анимации Google Doodle) или взаимодействия с пользователем (ввод запроса в поле поиска и получение предложений). Плагины, такие как Flash или Java, также могут запускаться, хотя в данный момент их нет на главной странице Google. Скрипты могут вызывать выполнение дополнительных сетевых запросов, а также изменять страницу или ее макет, вызывая повторный цикл рендеринга и перерисовки страницы.  
+END of this article
