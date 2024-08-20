@@ -14,33 +14,33 @@ This is all licensed under the terms of the Creative Commons Zero license.
 
 **Содержание**
 
-1. [The "g" key is pressed - Нажата клавиша "g".](#1-the-g-key-is-pressed)  
-2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](2-the-enter-key-bottoms-out)  
-   2.1 In the case of the USB keyboard - В случае USB-клавиатуры:  
-   2.2 In the case of Virtual Keyboard (as in touch screen devices) - В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):  
-4. [Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание [Не для USB-клавиатур].](#3-interrupt-fires-not-for-usb-keyboards)  
-  3.1 [(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.](#31-on-windows-a-wm_keydown-message-is-sent-to-the-app)  
-  3.2 (On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.  
-  3.3 (On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.  
-5. Parse URL - Парсинг URL.  
-6. Is it a URL or a search term? - Это URL или поисковый запрос?  
-7. Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.  
-8. Check HSTS list - Проверка списка HSTS.  
-9. DNS lookup - Поиск DNS.  
-10. ARP process - Процесс ARP.  
-11. Opening of a socket - Открытие сокета.  
-12. TLS handshake - Установление связи TLS.  
-13. If a packet is dropped - Если пакет отброшен?!  
-14. HTTP protocol - Протокол HTTP.  
-15. HTTP Server Request Handle - Обработка запроса HTTP сервера.  
-16. Behind the scenes of the Browser - За кулисами браузера.  
-17. Browser - Браузер.  
-18. HTML parsing - Парсинг HTML.  
-19. CSS interpretation - Интерпретация CSS.  
-20. Page Rendering - Рендеринг страницы.  
-21. GPU Rendering - Рендеринг процессора.  
-22. Window Server - Сервер Windows. 
-23. Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.  
+1. [The "g" key is pressed - Нажата клавиша "g".](#1-нажата-клавиша-g)  
+2. [The "enter" key bottoms out - Клавиша "enter" опускается до самого низа.](#2-клавиша-enter-опускается-до-самого-низа)  
+   2.1 [In the case of the USB keyboard - В случае USB-клавиатуры:](#21-в-случае-usb-клавиатуры)  
+   2.2 [In the case of Virtual Keyboard (as in touch screen devices) - В случае виртуальной клавиатуры (как в устройствах с сенсорным экраном):](#22-в-случае-виртуальной-клавиатуры-как-в-устройствах-с-сенсорным-экраном)  
+3. [Interrupt fires [NOT for USB keyboards] - Срабатывает прерывание (Не для USB-клавиатур).](#3-срабатывает-прерывание-не-для-usb-клавиатур)  
+  3.1 [(On Windows) A WM_KEYDOWN message is sent to the app - Сообщение "WM_KEYDOWN" отправляется приложению.](#31-в-windows-в-приложение-отправляется-сообщение-wm_keydown)  
+  3.2 [(On OS X) A KeyDown NSEvent is sent to the app - NSEvent KeyDown отправляется приложению.](#32-в-os-x-в-приложение-отправляется-сообщение-о-нажатии-клавиши-nsevent)  
+  3.3 [(On GNU/Linux) the Xorg server listens for keycodes - Сервер Xorg слушает коды клавиш.](#33-в-gnulinux-сервер-xorg-прослушивает-коды-клавиш)  
+5. [Parse URL - Парсинг URL.]()  
+6. [Is it a URL or a search term? - Это URL или поисковый запрос?]()  
+7. [Convert non-ASCII Unicode characters in the hostname - Преобразование не-ASCII символов Unicode в имени хоста.]()  
+8. [Check HSTS list - Проверка списка HSTS.]()  
+9. [DNS lookup - Поиск DNS.]()  
+10. [ARP process - Процесс ARP.]()  
+11. [Opening of a socket - Открытие сокета.]()  
+12. [TLS handshake - Установление связи TLS.]()  
+13. [If a packet is dropped - Если пакет отброшен?!]()  
+14. [HTTP protocol - Протокол HTTP.]()  
+15. [HTTP Server Request Handle - Обработка запроса HTTP сервера.]()  
+16. [Behind the scenes of the Browser - За кулисами браузера.]()  
+17. [Browser - Браузер.]()  
+18. [HTML parsing - Парсинг HTML.]()  
+19. [CSS interpretation - Интерпретация CSS.]()  
+20. [Page Rendering - Рендеринг страницы.]()  
+21. [GPU Rendering - Рендеринг процессора.]()  
+22. [Window Server - Сервер Windows.]()  
+23. [Post-rendering and user-induced execution - Последующий рендеринг и пользовательское выполнение.]()  
 
 The following sections explain the physical keyboard actions and the OS interrupts.  
 В следующих разделах описываются физические действия с клавиатуры и прерывания работы операционной системы.  
