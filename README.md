@@ -131,76 +131,39 @@ DNS-клиент устанавливает сокет на UDP-порт 53 на
 
 ## 10. Открытие сокета  
 Как только браузер получает IP-адрес конечного сервера, он берет его и указанный номер порта из URL-адреса (по умолчанию для протокола HTTP используется порт 80, а для HTTPS - порт 443), вызывает функцию системной библиотеки с именем socket и запрашивает поток сокетов TCP - AF_INET/AF_INET6 и SOCK_STREAM.  
-
-This request is first passed to the Transport Layer where a TCP segment is crafted. The destination port is added to the header, and a source port is chosen from within the kernel's dynamic port range (ip_local_port_range in Linux).  
-This segment is sent to the Network Layer, which wraps an additional IP header. The IP address of the destination server as well as that of the current machine is inserted to form a packet.  
 Этот запрос сначала передается на транспортный уровень, где создается сегмент TCP. Порт назначения добавляется в заголовок, а порт источника выбирается из динамического диапазона портов ядра (ip_local_port_range в Linux).  
 Этот сегмент отправляется на сетевой уровень, который передает дополнительный IP-заголовок. Для формирования пакета вводятся IP-адреса сервера назначения, а также текущего компьютера.  
-
-The packet next arrives at the Link Layer. A frame header is added that includes the MAC address of the machine's NIC as well as the MAC address of the gateway (local router). As before, if the kernel does not know the MAC address of the gateway, it must broadcast an ARP query to find it.  
-At this point the packet is ready to be transmitted through either:  
 Затем пакет поступает на канальный уровень. Добавляется заголовок фрейма, который включает MAC-адрес сетевой карты компьютера, а также MAC-адрес шлюза (локального маршрутизатора). Как и прежде, если ядро не знает MAC-адрес шлюза, оно должно отправить запрос ARP, чтобы найти его.  
 На этом этапе пакет готов к передаче через любой из:  
 ```
-Ethernet  
 Локальная сеть  
-WiFi  
 Wi-Fi  
-Cellular data network  
 Сотовая сеть передачи данных  
 ```  
-For most home or small business Internet connections the packet will pass from your computer, possibly through a local network, and then through a modem (MOdulator/DEModulator) which converts digital 1's and 0's into an analog signal suitable for transmission over telephone, cable, or wireless telephony connections. On the other end of the connection is another modem which converts the analog signal back into digital data to be processed by the next network node where the from and to addresses would be analyzed further.  
 Для большинства подключений к Интернету для дома или малого бизнеса пакет передается с вашего компьютера, возможно, через локальную сеть, а затем через модем (модулятор/демодулятор), который преобразует цифровые 1 и 0 в аналоговый сигнал, пригодный для передачи по телефонным, кабельным или беспроводным телефонным соединениям. На другом конце соединения находится другой модем, который преобразует аналоговый сигнал обратно в цифровые данные для обработки следующим узлом сети, где адреса "от" и "к" будут проанализированы дополнительно.  
-
-Most larger businesses and some newer residential connections will have fiber or direct Ethernet connections in which case the data remains digital and is passed directly to the next network node for processing.  
 Большинство крупных предприятий и некоторые новые жилые комплексы имеют оптоволоконные или прямые Ethernet-соединения, и в этом случае данные остаются цифровыми и передаются непосредственно на следующий сетевой узел для обработки.  
-
-Eventually, the packet will reach the router managing the local subnet. From there, it will continue to travel to the autonomous system's (AS) border routers, other ASes, and finally to the destination server. Each router along the way extracts the destination address from the IP header and routes it to the appropriate next hop. The time to live (TTL) field in the IP header is decremented by one for each router that passes. The packet will be dropped if the TTL field reaches zero or if the current router has no space in its queue (perhaps due to network congestion).  
 В конце концов, пакет достигнет маршрутизатора, управляющего локальной подсетью. Оттуда он продолжит путь к пограничным маршрутизаторам автономной системы (AS), в других случаях и, наконец, к целевому серверу. Каждый маршрутизатор на своем пути извлекает адрес назначения из IP-заголовка и перенаправляет его на соответствующий следующий переход. Поле time to live (TTL) в IP-заголовке уменьшается на единицу для каждого проходящего маршрутизатора. Пакет будет отброшен, если поле TTL достигнет нуля или если у текущего маршрутизатора не будет свободного места в очереди (возможно, из-за перегрузки сети).  
 
-This send and receive happens multiple times following the TCP connection flow:  
 Эта отправка и получение происходят несколько раз в соответствии с потоком TCP-соединений:  
-
-* Client chooses an initial sequence number (ISN) and sends the packet to the server with the SYN bit set to indicate it is setting the ISN  
-* Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN
-* Server receives SYN and if it's in an agreeable mood:
-* Server chooses its own initial sequence number
-* Server sets SYN to indicate it is choosing its ISN
-* Server copies the (client ISN +1) to its ACK field and adds the ACK flag to indicate it is acknowledging receipt of the first packet  
-* Сервер получает SYN и, если он в хорошем настроении:
-* Сервер сам выбирает свой начальный порядковый номер
-* Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN
+* Клиент выбирает начальный порядковый номер (ISN) и отправляет пакет на сервер с установленным битом SYN, указывающим на то, что он устанавливает ISN  
+* Сервер получает SYN и, если он в хорошем настроении:  
+* Сервер сам выбирает свой начальный порядковый номер  
+* Сервер устанавливает SYN, чтобы указать, что он выбирает свой ISN  
 * Сервер копирует (client ISN +1) в свое поле подтверждения и добавляет флаг подтверждения, чтобы указать, что он подтверждает получение первого пакета  
-* Client acknowledges the connection by sending a packet:
-* Increases its own sequence number
-* Increases the receiver acknowledgment number
-* Sets ACK field  
-* Клиент подтверждает соединение, отправляя пакет:
-* Увеличивает свой собственный порядковый номер
-* Увеличивает номер подтверждения получателя
+* Клиент подтверждает соединение, отправляя пакет:  
+* Увеличивает свой собственный порядковый номер  
+* Увеличивает номер подтверждения получателя  
 * Устанавливает поле подтверждения  
 
-Data is transferred as follows:  
 Передача данных осуществляется следующим образом:  
-
-As one side sends N data bytes, it increases its SEQ by that number  
 Когда одна сторона отправляет N байт данных, она увеличивает свой SEQ на это число  
+Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны  
 
-When the other side acknowledges receipt of that packet (or a string of packets), it sends an ACK packet with the ACK value equal to the last received sequence from the other  
-Когда другая сторона подтверждает получение этого пакета (или цепочки пакетов), она отправляет подтверждающий пакет со значением подтверждения, равным последней полученной последовательности от другой стороны 
-
-To close the connection:  
 Чтобы закрыть соединение:  
-
-The closer sends a FIN packet  
 Closer отправляет пакет FIN  
-
-The other sides ACKs the FIN packet and sends its own FIN  
-The closer acknowledges the other side's FIN with an ACK   
 Другая сторона подтверждает получение пакета FIN и отправляет свой собственный FIN  
 Closer подтверждает подтверждение FIN другой стороны  
 
-## 11. TLS handshake  
 ## 11. Рукопожатие по протоколу TLS  
 
 - The client computer sends a ClientHello message to the server with its Transport Layer Security (TLS) version, list of cipher algorithms and compression methods available.  
