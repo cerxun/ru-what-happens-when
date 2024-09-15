@@ -165,18 +165,23 @@ Closer отправляет пакет FIN
 Closer подтверждает подтверждение FIN другой стороны  
 
 ## 11. Рукопожатие по протоколу TLS  
-
 - Клиентский компьютер отправляет серверу сообщение ClientHello с указанием версии протокола Transport Layer Security (TLS), списка доступных алгоритмов шифрования и методов сжатия.  
-- The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.  
-- The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.  
-- The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.  
-- The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.  
-- From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.  
-- Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
+- The client verifies the server digital certificate against its list of trusted CAs. If trust can be established based on the CA, the client generates a string of pseudo-random bytes and encrypts this with the server's public key. These random bytes can be used to determine the symmetric key.
 - Клиент проверяет цифровой сертификат сервера на соответствие своему списку доверенных центров сертификации. Если доверие может быть установлено на основе центра сертификации, клиент генерирует строку псевдослучайных байтов и шифрует ее с помощью открытого ключа сервера. Эти случайные байты могут быть использованы для определения симметричного ключа.
+- The server decrypts the random bytes using its private key and uses these bytes to generate its own copy of the symmetric master key.
 - Сервер расшифровывает случайные байты с помощью своего закрытого ключа и использует эти байты для создания собственной копии симметричного мастер-ключа.
+- The client sends a Finished message to the server, encrypting a hash of the transmission up to this point with the symmetric key.
 - Клиент отправляет готовое сообщение на сервер, зашифровывая хэш-код, который был передан до этого момента, с помощью симметричного ключа.  
+- The server generates its own hash, and then decrypts the client-sent hash to verify that it matches. If it does, it sends its own Finished message to the client, also encrypted with the symmetric key.
 - Сервер генерирует свой собственный хэш, а затем расшифровывает отправленный клиентом хэш, чтобы убедиться в его совпадении. Если это так, он отправляет клиенту свое собственное готовое сообщение, также зашифрованное симметричным ключом.  
+- From now on the TLS session transmits the application (HTTP) data encrypted with the agreed symmetric key.
+- Отныне сеанс TLS передает данные приложения (HTTP), зашифрованные с помощью согласованного симметричного ключа.
+- 
+- Сервер отправляет клиенту сообщение ServerHello с версией TLS, выбранным шифром, методами сжатия и открытым сертификатом сервера, подписанным Центром сертификации (CA). Сертификат содержит открытый ключ, который будет использоваться клиентом для шифрования остальной части квитирования до тех пор, пока не будет согласован симметричный ключ.
+
+
+
+
 
 ## 12. If a packet is dropped  
 ## 12. Если пакет пропущен  
