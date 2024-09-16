@@ -209,36 +209,18 @@ HTTP/1.1 определяет параметр "закрыть" соединен
 После синтаксического анализа HTML веб-браузер (и сервер) повторяет этот процесс для каждого ресурса (изображения, CSS, favicon.ico и т.д.), на который ссылается HTML-страница, за исключением того, что вместо GET / HTTP/1.1 запрос будет GET /$(URL относительно www.google.com) HTTP/1.1.  
 Если HTML-код ссылается на ресурс, расположенный в домене, отличном от www.google.com, веб-браузер возвращается к шагам, связанным с разрешением доступа к другому домену, и выполняет все действия до этого момента для этого домена. В заголовке Host в запросе будет указано соответствующее имя сервера вместо google.com.  
 
------------------------------------------------
-## 14. HTTP Server Request Handle  
 ## 14. Дескриптор запроса HTTP-сервера  
 
-The HTTPD (HTTP Daemon) server is the one handling the requests/responses on the server-side. The most common HTTPD servers are Apache or nginx for Linux and IIS for Windows.  
 Сервер HTTPD (HTTP-демон) обрабатывает запросы и ответы на стороне сервера. Наиболее распространенными HTTPD-серверами являются Apache или nginx для Linux и IIS для Windows.  
-The HTTPD (HTTP Daemon) receives the request.  
 Запрос получает HTTPD (HTTP-демон).  
-
-The server breaks down the request to the following parameters:  
 Сервер разбивает запрос на следующие параметры:  
-
-HTTP Request Method (either GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS, or TRACE). In the case of a URL entered directly into the address bar, this will be GET.
-Domain, in this case - google.com.  
-Метод HTTP-запроса (`GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE`). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET.
-Домен, в данном случае - 'google.com'.  
-
-Requested path/page, in this case - / (as no specific path/page was requested, / is the default path).  
+Метод HTTP-запроса (```GET, HEAD, POST, PUT, PATCH, DELETE, CONNECT, OPTIONS или TRACE```). В случае URL-адреса, введенного непосредственно в адресную строку, это будет GET. Домен, в данном случае - 'google.com'.  
 Запрашиваемый путь/страница, в данном случае - / (поскольку конкретный путь/страница не запрашивались, по умолчанию используется путь /).  
 
-+ The server verifies that there is a Virtual Host configured on the server that corresponds with google.com.  
-+ The server verifies that google.com can accept GET requests.  
-+ The server verifies that the client is allowed to use this method (by IP, authentication, etc.).  
 + Сервер проверяет, настроен ли на сервере виртуальный хост, соответствующий google.com.  
 + Сервер проверяет, может ли google.com принимать запросы GET.  
 + Сервер проверяет, разрешено ли клиенту использовать этот метод (по IP, аутентификации и т.д.).  
 
-If the server has a rewrite module installed (like mod_rewrite for Apache or URL Rewrite for IIS), it tries to match the request against one of the configured rules. If a matching rule is found, the server uses that rule to rewrite the request.  
-The server goes to pull the content that corresponds with the request, in our case it will fall back to the index file, as "/" is the main file (some cases can override this, but this is the most common method).  
-The server parses the file according to the handler. If Google is running on PHP, the server uses PHP to interpret the index file, and streams the output to the client.  
 Если на сервере установлен модуль перезаписи (например, mod_rewrite для Apache или URL Rewrite для IIS), он пытается сопоставить запрос с одним из настроенных правил. Если найдено подходящее правило, сервер использует это правило для перезаписи запроса.  
 Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).  
 Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.  
