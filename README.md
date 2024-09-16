@@ -210,7 +210,6 @@ HTTP/1.1 определяет параметр "закрыть" соединен
 Если HTML-код ссылается на ресурс, расположенный в домене, отличном от www.google.com, веб-браузер возвращается к шагам, связанным с разрешением доступа к другому домену, и выполняет все действия до этого момента для этого домена. В заголовке Host в запросе будет указано соответствующее имя сервера вместо google.com.  
 
 ## 14. Дескриптор запроса HTTP-сервера  
-
 Сервер HTTPD (HTTP-демон) обрабатывает запросы и ответы на стороне сервера. Наиболее распространенными HTTPD-серверами являются Apache или nginx для Linux и IIS для Windows.  
 Запрос получает HTTPD (HTTP-демон).  
 Сервер разбивает запрос на следующие параметры:  
@@ -225,76 +224,37 @@ HTTP/1.1 определяет параметр "закрыть" соединен
 Сервер извлекает содержимое, соответствующее запросу, в нашем случае оно возвращается к индексному файлу, поскольку "/" является основным файлом (в некоторых случаях это можно переопределить, но это наиболее распространенный метод).  
 Сервер анализирует файл в соответствии с обработчиком. Если Google работает на PHP, сервер использует PHP для интерпретации индексного файла и передает выходные данные клиенту.  
 
-## 15. Behind the scenes of the Browser  
 ## 15. За кулисами браузера  
-
-Once the server supplies the resources (`HTML, CSS, JS, images, etc.`) to the browser it undergoes the below process:  
-Как только сервер предоставляет ресурсы (`HTML, CSS, JS, изображения и т.д.`) браузеру, он выполняет описанный ниже процесс:  
-
-* Parsing - HTML, CSS, JS  
+Как только сервер предоставляет ресурсы (```HTML, CSS, JS, изображения и т.д.```) браузеру, он выполняет описанный ниже процесс:  
 * Синтаксический анализ - HTML, CSS, JS  
-* Rendering - Construct DOM Tree → Render Tree → Layout of Render Tree → Painting the render tree  
 * Рендеринг - Построение дерева DOM → Дерево рендеринга → Макет дерева рендеринга → Отображение дерева рендеринга в браузере  
 
-## 16. Browser  
 ## 16. Браузер  
-
-The browser's functionality is to present the web resource you choose, by requesting it from the server and displaying it in the browser window. The resource is usually an HTML document, but may also be a PDF, image, or some other type of content. The location of the resource is specified by the user using a URI (Uniform Resource Identifier).  
-Функциональность браузера заключается в представлении выбранного вами веб-ресурса путем запроса его с сервера и отображения в окне браузера. Ресурс обычно представляет собой HTML-документ, но также может быть в формате PDF, с изображением или каким-либо другим типом содержимого. Местоположение ресурса определяется пользователем с помощью URI (Uniform Resource Identifier).  
-
-The way the browser interprets and displays HTML files is specified in the HTML and CSS specifications. These specifications are maintained by the W3C (World Wide Web Consortium) organization, which is the standards organization for the web.    
+Функциональность браузера заключается в представлении выбранного вами веб-ресурса путем запроса его с сервера и отображения в окне браузера. Ресурс обычно представляет собой HTML-документ, но также может быть в формате PDF, с изображением или каким-либо другим типом содержимого. Местоположение ресурса определяется пользователем с помощью URI (Единый Идентификатор Ресурса).  
 Способ, которым браузер интерпретирует и отображает HTML-файлы, указан в спецификациях HTML и CSS. Эти спецификации поддерживаются организацией W3C (World Wide Web Consortium), которая является организацией по стандартизации в Интернете.  
-
-Browser user interfaces have a lot in common with each other. Among the common user interface elements are:  
 Пользовательские интерфейсы браузеров имеют много общего друг с другом. К числу общих элементов пользовательского интерфейса относятся:  
-
-* An address bar for inserting a URI  
 * Адресная строка для ввода URI  
-* Back and forward buttons  
-* Bookmarking options  
 * Кнопки "Назад" и "Вперед"  
 * Параметры закладок  
+* Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
+* Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
 
-Refresh and stop buttons for refreshing or stopping the loading of current documents
-Home button that takes you to your home page  
-Кнопки "Обновить" и "Остановить" для обновления или остановки загрузки текущих документов  
-Кнопка "Домой", которая приведет вас на вашу домашнюю страницу  
-
-**Browser High-Level Structure**  
 **Высокоуровневая структура браузера**  
-
-The components of the browsers are:  
 Компонентами браузеров являются:  
-
-+ User interface: The user interface includes the address bar, back/forward button, bookmarking menu, etc. Every part of the browser display except the window where you see the requested page.  
 + Пользовательский интерфейс: Пользовательский интерфейс включает в себя адресную строку, кнопки возврата/перемотки вперед, меню закладок и т.д. Все части экрана браузера, кроме окна, в котором вы видите запрашиваемую страницу.  
-
-+ Browser engine: The browser engine marshals actions between the UI and the rendering engine.  
 + Движок браузера: Движок браузера управляет действиями между пользовательским интерфейсом и движком рендеринга.  
-
-+ Rendering engine: The rendering engine is responsible for displaying requested content. For example if the requested content is HTML, the rendering engine parses HTML and CSS, and displays the parsed content on the screen.  
 + Движок рендеринга: движок рендеринга отвечает за отображение запрошенного контента. Например, если запрошенный контент является HTML, движок рендеринга анализирует HTML и CSS и отображает обработанный контент на экране.  
-
-+ Networking: The networking handles network calls such as HTTP requests, using different implementations for different platforms behind a platform-independent interface.
-+ UI backend: The UI backend is used for drawing basic widgets like combo boxes and windows. This backend exposes a generic interface that is not platform-specific. Underneath it uses operating system user interface methods.  
 + Сетевое взаимодействие: Сеть обрабатывает сетевые вызовы, такие как HTTP-запросы, используя различные реализации для разных платформ, используя независимый от платформы интерфейс.  
 + Внутренний интерфейс пользовательского интерфейса: Внутренний интерфейс пользовательского интерфейса используется для создания базовых виджетов, таких как поля со списком и окна. Этот внутренний интерфейс предоставляет общий интерфейс, который не зависит от платформы. В своей основе он использует методы пользовательского интерфейса операционной системы.  
-
-+ JavaScript engine: The JavaScript engine is used to parse and execute JavaScript code.  
-+ Data storage: The data storage is a persistence layer. The browser may need to save all sorts of data locally, such as cookies. Browsers also support storage mechanisms such as localStorage, IndexedDB, WebSQL and FileSystem.  
 + Движок JavaScript: Движок JavaScript используется для анализа и выполнения кода JavaScript.  
 + Хранение данных: Хранилище данных представляет собой постоянный уровень. Браузеру может потребоваться локальное сохранение всех видов данных, таких как файлы cookie. Браузеры также поддерживают такие механизмы хранения, как localStorage, IndexedDB, WebSQL и файловая система.  
 
-## 17. HTML parsing  
 ## 17. Синтаксический анализ HTML  
-
-The rendering engine starts getting the contents of the requested document from the networking layer. This will usually be done in 8kB chunks.  
-The primary job of the HTML parser is to parse the HTML markup into a parse tree.  
-The output tree (the "parse tree") is a tree of DOM element and attribute nodes. DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript. The root of the tree is the "Document" object. Prior to any manipulation via scripting, the DOM has an almost one-to-one relation to the markup.  
 Механизм рендеринга начинает получать содержимое запрошенного документа с сетевого уровня. Обычно это выполняется фрагментами по 8 Кб.  
 Основная задача HTML-анализатора - преобразовать HTML-разметку в дерево синтаксического анализа.  
 Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.  
 
+---------------------------------------------
 The parsing algorithm  
 HTML cannot be parsed using the regular top-down or bottom-up parsers.  
 Алгоритм синтаксического анализа  
