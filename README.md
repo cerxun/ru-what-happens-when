@@ -253,22 +253,13 @@ HTTP/1.1 определяет параметр "закрыть" соединен
 Механизм рендеринга начинает получать содержимое запрошенного документа с сетевого уровня. Обычно это выполняется фрагментами по 8 Кб.  
 Основная задача HTML-анализатора - преобразовать HTML-разметку в дерево синтаксического анализа.  
 Дерево вывода ("дерево синтаксического анализа") - это дерево элементов DOM и узлов атрибутов. DOM - это сокращение от Document Object Model. Это объектное представление HTML-документа и интерфейс HTML-элементов с внешним миром, такой как JavaScript. Корнем дерева является объект "Document". Перед выполнением любых манипуляций с помощью сценариев DOM имеет почти однозначное отношение к разметке.  
-
----------------------------------------------
-The parsing algorithm  
-HTML cannot be parsed using the regular top-down or bottom-up parsers.  
 Алгоритм синтаксического анализа  
 HTML не может быть проанализирован с помощью обычных синтаксических анализаторов "сверху вниз" или "снизу вверх".  
-
-The reasons are:  
 Причины в том, что:  
-
-The forgiving nature of the language.  
 Язык прост в использовании.  
-
-The fact that browsers have traditional error tolerance to support well known cases of invalid HTML.  
 Тот факт, что браузеры традиционно допускают ошибки для поддержки хорошо известных случаев некорректного HTML.  
 
+---------------------------------------------
 The parsing process is reentrant. For other languages, the source doesn't change during parsing, but in HTML, dynamic code (such as script elements containing document.write() calls) can add extra tokens, so the parsing process actually modifies the input.  
 Unable to use the regular parsing techniques, the browser utilizes a custom parser for parsing HTML. The parsing algorithm is described in detail by the HTML5 specification.  
 The algorithm consists of two stages: tokenization and tree construction.  
